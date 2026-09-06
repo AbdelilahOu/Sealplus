@@ -119,6 +119,21 @@
       "id": 24,
       "name": "Andrew Sidney Crump",
       "METHOD": "PAYPAL"
+    },
+    {
+      "id": 25,
+      "name": "Lorenzo Tomadini",
+      "METHOD": "PAYPAL"
+    },
+    {
+      "id": 26,
+      "name": "Dominik Wenzel",
+      "METHOD": "PAYPAL"
+    },
+    {
+      "id": 27,
+      "name": "Francesco Capaccioni",
+      "METHOD": "PAYPAL"
     }
   ]
 }
