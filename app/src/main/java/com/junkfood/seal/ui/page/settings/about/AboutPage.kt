@@ -66,11 +66,11 @@ import com.junkfood.seal.ui.component.ConfirmButton
 import com.junkfood.seal.util.AUTO_UPDATE
 import com.junkfood.seal.util.PreferenceUtil
 
-private const val releaseURL = "https://github.com/MaheshTechnicals/Sealplus/releases"
-private const val repoUrl = "https://github.com/MaheshTechnicals/Sealplus/blob/main/README.md"
+private const val releaseURL = "https://github.com/AbdelilahOu/Sealplus/releases"
+private const val repoUrl = "https://github.com/AbdelilahOu/Sealplus/blob/main/README.md"
 const val weblate = "https://hosted.weblate.org/engage/seal/"
 const val YtdlpRepository = "https://github.com/yt-dlp/yt-dlp"
-private const val githubIssueUrl = "https://github.com/MaheshTechnicals/Sealplus/issues"
+private const val githubIssueUrl = "https://github.com/AbdelilahOu/Sealplus/issues"
 private const val TAG = "AboutPage"
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -308,7 +308,7 @@ fun AutoUpdateUnavailableDialog(onDismissRequest: () -> Unit = {}) {
         val startIndex = text.indexOf(hyperLinkText)
         val endIndex = startIndex + hyperLinkText.length
         addUrlAnnotation(
-            UrlAnnotation("https://github.com/MaheshTechnicals/Sealplus/releases/latest"),
+            UrlAnnotation("https://github.com/AbdelilahOu/Sealplus/releases/latest"),
             start = startIndex,
             end = endIndex,
         )
