@@ -70,7 +70,7 @@ fun TroubleShootingPage(
                         modifier = Modifier,
                         text = stringResource(R.string.issue_tracker_hint),
                     )
-                    val knownIssueUrlSeal = "https://github.com/MaheshTechnicals/Sealplus/issues"
+                    val knownIssueUrlSeal = "https://github.com/AbdelilahOu/Sealplus/issues"
                     PreferenceItem(
                         title = "Seal Issue Tracker",
                         description = null,
