@@ -19,10 +19,8 @@ import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material.icons.outlined.AutoAwesome
 import androidx.compose.material.icons.outlined.Description
 import androidx.compose.material.icons.outlined.NewReleases
-import androidx.compose.material.icons.outlined.Public
 import androidx.compose.material.icons.outlined.Update
 import androidx.compose.material.icons.outlined.UpdateDisabled
-import androidx.compose.material.icons.outlined.VolunteerActivism
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -49,7 +47,6 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalUriHandler
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.ExperimentalTextApi
@@ -74,9 +71,6 @@ private const val repoUrl = "https://github.com/MaheshTechnicals/Sealplus/blob/m
 const val weblate = "https://hosted.weblate.org/engage/seal/"
 const val YtdlpRepository = "https://github.com/yt-dlp/yt-dlp"
 private const val githubIssueUrl = "https://github.com/MaheshTechnicals/Sealplus/issues"
-private const val telegramChannelUrl = "https://t.me/maheshtechnicals"
-private const val youtubeChannelUrl = "https://youtube.com/@maheshtechnicals"
-private const val githubSponsor = "https://github.com/sponsors/JunkFood02"
 private const val TAG = "AboutPage"
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -85,7 +79,6 @@ fun AboutPage(
     onNavigateBack: () -> Unit,
     onNavigateToCreditsPage: () -> Unit,
     onNavigateToUpdatePage: () -> Unit,
-    onNavigateToDonatePage: () -> Unit,
     onNavigateToOnboarding: () -> Unit = {},
 ) {
     val scrollBehavior =
@@ -170,14 +163,14 @@ fun AboutPage(
                         ) {
                             Column(modifier = Modifier.weight(1f)) {
                                 Text(
-                                    text = "View Onboarding",
+                                    text = "About This Fork",
                                     style = MaterialTheme.typography.titleMedium,
                                     fontWeight = FontWeight.Bold,
                                     color = MaterialTheme.colorScheme.onSurface,
                                 )
                                 Spacer(modifier = Modifier.height(4.dp))
                                 Text(
-                                    text = "See the introduction screens again",
+                                    text = "What this app is built on",
                                     style = MaterialTheme.typography.bodySmall,
                                     color =
                                         MaterialTheme.colorScheme.onSurfaceVariant.copy(
@@ -212,44 +205,6 @@ fun AboutPage(
                                 description = stringResource(R.string.release_desc),
                                 icon = Icons.Outlined.NewReleases,
                                 onClick = { openUrl(releaseURL) },
-                                modifier = Modifier.weight(1f),
-                            )
-                        }
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.spacedBy(12.dp),
-                        ) {
-                            CommunityCard(
-                                title = stringResource(R.string.sponsor),
-                                description = stringResource(R.string.sponsor_desc),
-                                icon = Icons.Outlined.VolunteerActivism,
-                                onClick = onNavigateToDonatePage,
-                                modifier = Modifier.weight(1f),
-                            )
-                            CommunityCard(
-                                title = stringResource(R.string.telegram_channel),
-                                description = telegramChannelUrl,
-                                icon = painterResource(id = R.drawable.icons8_telegram_app),
-                                onClick = { openUrl(telegramChannelUrl) },
-                                modifier = Modifier.weight(1f),
-                            )
-                        }
-                        Row(
-                            modifier = Modifier.fillMaxWidth(),
-                            horizontalArrangement = Arrangement.spacedBy(12.dp),
-                        ) {
-                            CommunityCard(
-                                title = stringResource(R.string.youtube_channel),
-                                description = youtubeChannelUrl,
-                                icon = painterResource(id = R.drawable.icons8_youtube),
-                                onClick = { openUrl(youtubeChannelUrl) },
-                                modifier = Modifier.weight(1f),
-                            )
-                            CommunityCard(
-                                title = stringResource(R.string.website),
-                                description = "sealplus.in",
-                                icon = Icons.Outlined.Public,
-                                onClick = { openUrl("https://sealplus.in/") },
                                 modifier = Modifier.weight(1f),
                             )
                         }

@@ -18,6 +18,15 @@
     <string name="download_start_msg">Download \"%1$s\"</string>
     <string name="fetch_info_error_msg">Could not fetch video info</string>
     <string name="general_settings">General</string>
+    <string name="settings_section_general">General</string>
+    <string name="settings_section_workflow">Workflow</string>
+    <string name="settings_section_support">Support</string>
+    <string name="get_started">Get Started</string>
+    <string name="language_english">English</string>
+    <string name="language_german">German</string>
+    <string name="language_original">Original</string>
+    <string name="onboarding_fork_notice_prefix">This app is built on top of </string>
+    <string name="onboarding_fork_notice_suffix"> by JunkFood02, an open-source video downloader powered by yt-dlp.</string>
     <string name="language">Display language</string>
     <string name="language_settings">Set display language</string>
     <string name="task_running">An existing download task is already running</string>

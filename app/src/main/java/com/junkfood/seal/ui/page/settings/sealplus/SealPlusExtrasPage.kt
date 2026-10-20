@@ -13,7 +13,6 @@ import androidx.compose.material.icons.outlined.Lock
 import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material.icons.outlined.ViewAgenda
 import androidx.compose.material.icons.outlined.VisibilityOff
-import androidx.compose.material.icons.outlined.VolunteerActivism
 import androidx.compose.material.icons.outlined.SignalCellular4Bar
 import androidx.compose.material.icons.outlined.SignalWifi4Bar
 import androidx.compose.material.icons.rounded.NetworkCheck
@@ -42,6 +41,8 @@ import com.junkfood.seal.ui.component.PreferenceItem
 import com.junkfood.seal.ui.component.PreferenceSubtitle
 import com.junkfood.seal.ui.component.PreferenceSingleChoiceItem
 import com.junkfood.seal.ui.component.PreferenceSwitch
+import com.junkfood.seal.ui.component.SettingsGroupCard
+import com.junkfood.seal.ui.component.SettingsGroupDivider
 import com.junkfood.seal.ui.page.security.LockScreen
 import com.junkfood.seal.util.AuthenticationManager
 import com.junkfood.seal.util.ARIA2C_CONNECTIONS
@@ -57,10 +58,6 @@ import com.junkfood.seal.util.NOTIFICATION_LED
 import com.junkfood.seal.util.NOTIFICATION_SOUND
 import com.junkfood.seal.util.NOTIFICATION_SUCCESS_SOUND
 import com.junkfood.seal.util.NOTIFICATION_VIBRATE
-import com.junkfood.seal.util.SPONSOR_DIALOG_FREQUENCY
-import com.junkfood.seal.util.SPONSOR_FREQ_MONTHLY
-import com.junkfood.seal.util.SPONSOR_FREQ_OFF
-import com.junkfood.seal.util.SPONSOR_FREQ_WEEKLY
 import com.junkfood.seal.util.PreferenceUtil.getBoolean
 import com.junkfood.seal.util.PreferenceUtil.getInt
 import com.junkfood.seal.util.PreferenceUtil.updateBoolean
@@ -87,8 +84,6 @@ fun SealPlusExtrasPage(
     var notificationVibrate by remember { mutableStateOf(NOTIFICATION_VIBRATE.getBoolean()) }
     var notificationLed by remember { mutableStateOf(NOTIFICATION_LED.getBoolean()) }
     var notificationSuccessSound by remember { mutableStateOf(NOTIFICATION_SUCCESS_SOUND.getBoolean()) }
-    var sponsorDialogFrequency by remember { mutableStateOf(SPONSOR_DIALOG_FREQUENCY.getInt()) }
-    var showSponsorFrequencyDialog by remember { mutableStateOf(false) }
     var notificationErrorSound by remember { mutableStateOf(NOTIFICATION_ERROR_SOUND.getBoolean()) }
     var formatListView by remember { mutableStateOf(FORMAT_LIST_VIEW.getBoolean()) }
     
@@ -146,12 +141,13 @@ fun SealPlusExtrasPage(
             item {
                 PreferenceSubtitle(text = stringResource(R.string.download_control))
             }
-            
+
             item {
-                var maxConcurrentDownloads by remember { 
-                    mutableStateOf(MAX_CONCURRENT_DOWNLOADS.getInt()) 
+              SettingsGroupCard {
+                var maxConcurrentDownloads by remember {
+                    mutableStateOf(MAX_CONCURRENT_DOWNLOADS.getInt())
                 }
-                
+
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -215,9 +211,7 @@ fun SealPlusExtrasPage(
                         )
                     }
                 }
-            }
-            
-            item {
+                SettingsGroupDivider()
                 val aria2cConnectionOptions = listOf(2, 4, 8, 16, 32)
                 var aria2cConnections by remember {
                     mutableStateOf(ARIA2C_CONNECTIONS.getInt().let { saved ->
@@ -286,6 +280,7 @@ fun SealPlusExtrasPage(
                         )
                     }
                 }
+              }
             }
 
             item {
@@ -293,6 +288,7 @@ fun SealPlusExtrasPage(
             }
 
             item {
+              SettingsGroupCard {
                 PreferenceSwitch(
                     title = stringResource(R.string.format_list_view_title),
                     description = stringResource(R.string.format_list_view_desc),
@@ -303,13 +299,15 @@ fun SealPlusExtrasPage(
                         formatListView = !formatListView
                     }
                 )
+              }
             }
 
             item {
                 PreferenceSubtitle(text = stringResource(R.string.security_and_privacy))
             }
-            
+
             item {
+              SettingsGroupCard {
                 PreferenceItem(
                     title = stringResource(R.string.app_lock),
                     description = stringResource(R.string.lock_app_with_pin_biometric),
@@ -325,9 +323,7 @@ fun SealPlusExtrasPage(
                         }
                     }
                 )
-            }
-
-            item {
+                SettingsGroupDivider()
                 PreferenceItem(
                     title = stringResource(R.string.hidden_content),
                     description = stringResource(R.string.hidden_content_desc),
@@ -343,9 +339,7 @@ fun SealPlusExtrasPage(
                         }
                     }
                 )
-            }
-            
-            item {
+                SettingsGroupDivider()
                 PreferenceItem(
                     title = stringResource(R.string.network_type_restriction),
                     description = when (networkTypeRestriction) {
@@ -360,9 +354,7 @@ fun SealPlusExtrasPage(
                     },
                     onClick = { showNetworkDialog = true }
                 )
-            }
-
-            item {
+                SettingsGroupDivider()
                 Column(
                     modifier =
                         Modifier
@@ -427,109 +419,76 @@ fun SealPlusExtrasPage(
                         )
                     }
                 }
+              }
             }
-            
+
             item {
                 PreferenceSubtitle(text = stringResource(R.string.notification_settings))
             }
-            
+
             item {
+              SettingsGroupCard {
                 PreferenceSwitch(
                     title = stringResource(R.string.notification_sound_settings),
                     description = stringResource(R.string.notification_sound_desc),
                     icon = Icons.Outlined.Notifications,
                     isChecked = notificationSound,
-                    onClick = { 
+                    onClick = {
                         NOTIFICATION_SOUND.updateBoolean(!notificationSound)
                         notificationSound = !notificationSound
                     }
                 )
-            }
-            
-            item {
+                SettingsGroupDivider()
                 PreferenceSwitch(
                     title = stringResource(R.string.notification_vibrate_settings),
                     description = stringResource(R.string.notification_vibrate_desc),
                     icon = Icons.Outlined.Notifications,
                     isChecked = notificationVibrate,
                     enabled = notificationSound,
-                    onClick = { 
+                    onClick = {
                         NOTIFICATION_VIBRATE.updateBoolean(!notificationVibrate)
                         notificationVibrate = !notificationVibrate
                     }
                 )
-            }
-            
-            item {
+                SettingsGroupDivider()
                 PreferenceSwitch(
                     title = stringResource(R.string.notification_led_settings),
                     description = stringResource(R.string.notification_led_desc),
                     icon = Icons.Outlined.Notifications,
                     isChecked = notificationLed,
                     enabled = notificationSound,
-                    onClick = { 
+                    onClick = {
                         NOTIFICATION_LED.updateBoolean(!notificationLed)
                         notificationLed = !notificationLed
                     }
                 )
-            }
-            
-            item {
+                SettingsGroupDivider()
                 PreferenceSwitch(
                     title = stringResource(R.string.notification_success_sound_settings),
                     description = stringResource(R.string.notification_success_sound_desc),
                     icon = Icons.Outlined.Notifications,
                     isChecked = notificationSuccessSound,
                     enabled = notificationSound,
-                    onClick = { 
+                    onClick = {
                         NOTIFICATION_SUCCESS_SOUND.updateBoolean(!notificationSuccessSound)
                         notificationSuccessSound = !notificationSuccessSound
                     }
                 )
-            }
-            
-            item {
+                SettingsGroupDivider()
                 PreferenceSwitch(
                     title = stringResource(R.string.notification_error_sound_settings),
                     description = stringResource(R.string.notification_error_sound_desc),
                     icon = Icons.Outlined.Notifications,
                     isChecked = notificationErrorSound,
                     enabled = notificationSound,
-                    onClick = { 
+                    onClick = {
                         NOTIFICATION_ERROR_SOUND.updateBoolean(!notificationErrorSound)
                         notificationErrorSound = !notificationErrorSound
                     }
                 )
+              }
             }
 
-            item {
-                PreferenceSubtitle(text = stringResource(R.string.sponsor_support_section))
-            }
-
-            item {
-                PreferenceItem(
-                    title = stringResource(R.string.sponsor_dialog_frequency_title),
-                    description = when (sponsorDialogFrequency) {
-                        SPONSOR_FREQ_OFF -> stringResource(R.string.sponsor_dialog_off)
-                        SPONSOR_FREQ_MONTHLY -> stringResource(R.string.sponsor_dialog_monthly)
-                        else -> stringResource(R.string.sponsor_dialog_weekly)
-                    },
-                    icon = Icons.Outlined.VolunteerActivism,
-                    onClick = { showSponsorFrequencyDialog = true },
-                )
-            }
-        }
-
-        if (showSponsorFrequencyDialog) {
-            SponsorFrequencyDialog(
-                currentSelection = sponsorDialogFrequency,
-                onDismissRequest = { showSponsorFrequencyDialog = false },
-                onConfirm = { selected ->
-                    SPONSOR_DIALOG_FREQUENCY.updateInt(selected)
-                    sponsorDialogFrequency = selected
-                    showSponsorFrequencyDialog = false
-                },
-            )
         }
 
         if (showNetworkDialog) {
@@ -598,53 +557,5 @@ private fun NetworkTypeDialog(
                 Text(stringResource(android.R.string.cancel))
             }
         }
-    )
-}
-@Composable
-private fun SponsorFrequencyDialog(
-    currentSelection: Int,
-    onDismissRequest: () -> Unit,
-    onConfirm: (Int) -> Unit,
-) {
-    var selected by remember { mutableStateOf(currentSelection) }
-
-    androidx.compose.material3.AlertDialog(
-        onDismissRequest = onDismissRequest,
-        icon = { Icon(Icons.Outlined.VolunteerActivism, contentDescription = null, tint = MaterialTheme.colorScheme.primary) },
-        title = { Text(stringResource(R.string.sponsor_dialog_frequency_title)) },
-        text = {
-            Column {
-                Text(
-                    text = stringResource(R.string.sponsor_dialog_frequency_desc),
-                    style = MaterialTheme.typography.bodyMedium,
-                    modifier = Modifier.padding(bottom = 12.dp),
-                )
-                PreferenceSingleChoiceItem(
-                    text = stringResource(R.string.sponsor_dialog_off),
-                    selected = selected == SPONSOR_FREQ_OFF,
-                    onClick = { selected = SPONSOR_FREQ_OFF },
-                )
-                PreferenceSingleChoiceItem(
-                    text = stringResource(R.string.sponsor_dialog_weekly),
-                    selected = selected == SPONSOR_FREQ_WEEKLY,
-                    onClick = { selected = SPONSOR_FREQ_WEEKLY },
-                )
-                PreferenceSingleChoiceItem(
-                    text = stringResource(R.string.sponsor_dialog_monthly),
-                    selected = selected == SPONSOR_FREQ_MONTHLY,
-                    onClick = { selected = SPONSOR_FREQ_MONTHLY },
-                )
-            }
-        },
-        confirmButton = {
-            androidx.compose.material3.TextButton(onClick = { onConfirm(selected) }) {
-                Text(stringResource(android.R.string.ok))
-            }
-        },
-        dismissButton = {
-            androidx.compose.material3.TextButton(onClick = onDismissRequest) {
-                Text(stringResource(android.R.string.cancel))
-            }
-        },
     )
 }

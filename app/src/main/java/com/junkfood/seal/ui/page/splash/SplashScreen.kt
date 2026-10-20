@@ -82,18 +82,6 @@ fun SplashScreen(
         label = "taglineAlpha"
     )
     
-    // Pulsing glow effect for logo
-    val infiniteTransition = rememberInfiniteTransition(label = "glow")
-    val glowAlpha by infiniteTransition.animateFloat(
-        initialValue = 0.3f,
-        targetValue = 0.7f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(1500, easing = LinearEasing),
-            repeatMode = RepeatMode.Reverse
-        ),
-        label = "glowAlpha"
-    )
-    
     // Trigger animations sequentially
     LaunchedEffect(Unit) {
         delay(200) // Initial delay
@@ -135,29 +123,11 @@ fun SplashScreen(
             verticalArrangement = Arrangement.Center,
             modifier = Modifier.padding(horizontal = 32.dp)
         ) {
-            // Logo with glow effect
+            // Logo
             Box(
                 contentAlignment = Alignment.Center,
                 modifier = Modifier.size(180.dp)
             ) {
-                // Glow effect (only in Gradient Dark mode)
-                if (isGradientDark && logoVisible) {
-                    Box(
-                        modifier = Modifier
-                            .size(200.dp)
-                            .scale(logoScale * 1.1f)
-                            .alpha(glowAlpha * logoAlpha * 0.4f)
-                            .background(
-                                brush = Brush.radialGradient(
-                                    colors = listOf(
-                                        GradientDarkColors.GradientPrimaryEnd.copy(alpha = 0.5f),
-                                        Color.Transparent
-                                    )
-                                )
-                            )
-                    )
-                }
-                
                 // Main Logo
                 Image(
                     painter = painterResource(id = R.drawable.splash_logo),
@@ -214,18 +184,6 @@ fun SplashScreen(
                 .padding(bottom = 48.dp)
                 .alpha(taglineAlpha)
         ) {
-            Text(
-                text = "Powered by Mahesh Technicals",
-                style = MaterialTheme.typography.bodySmall,
-                color = if (isGradientDark) {
-                    GradientDarkColors.OnSurface.copy(alpha = 0.6f)
-                } else {
-                    MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
-                }
-            )
-            
-            Spacer(modifier = Modifier.height(4.dp))
-            
             Text(
                 text = "© 2026 Seal Plus",
                 style = MaterialTheme.typography.labelSmall,

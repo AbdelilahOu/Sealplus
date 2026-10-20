@@ -67,7 +67,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
@@ -112,21 +111,6 @@ import com.junkfood.seal.util.findURLsFromString
 import com.junkfood.seal.util.makeToast
 import org.koin.compose.koinInject
 
-private object BatchColors {
-    val Background = Color(0xFF09090B)
-    val Surface = Color(0xFF14141A)
-    val SurfaceVariant = Color(0xFF1E1E28)
-    val Primary = Color(0xFF7C4DFF)
-    val Border = Color(0xFF2A2A35)
-    val TextPrimary = Color(0xFFFFFFFF)
-    val TextSecondary = Color(0xFF9E9EAB)
-    val Warning = Color(0xFFF59E0B)
-}
-
-private val GradientBrush = Brush.horizontalGradient(
-    colors = listOf(Color(0xFF7C4DFF), Color(0xFF9C6DFF)),
-)
-
 private data class QualityChipItem(
     val value: Int,
     val label: String,
@@ -168,24 +152,24 @@ fun BatchUrlImportPage(
         }
     }
 
-    val bg = if (isDarkMode) BatchColors.Background else MaterialTheme.colorScheme.background
-    val surface = if (isDarkMode) BatchColors.Surface else MaterialTheme.colorScheme.surface
-    val surfaceVariant = if (isDarkMode) BatchColors.SurfaceVariant else MaterialTheme.colorScheme.surfaceVariant
-    val border = if (isDarkMode) BatchColors.Border else MaterialTheme.colorScheme.outlineVariant
-    val primary = if (isDarkMode) BatchColors.Primary else MaterialTheme.colorScheme.primary
-    val textPrimary = if (isDarkMode) BatchColors.TextPrimary else MaterialTheme.colorScheme.onSurface
-    val textSecondary = if (isDarkMode) BatchColors.TextSecondary else MaterialTheme.colorScheme.onSurfaceVariant
+    val bg = if (isDarkMode) ToolColors.Background else MaterialTheme.colorScheme.background
+    val surface = if (isDarkMode) ToolColors.Surface else MaterialTheme.colorScheme.surface
+    val surfaceVariant = if (isDarkMode) ToolColors.SurfaceVariant else MaterialTheme.colorScheme.surfaceVariant
+    val border = if (isDarkMode) ToolColors.Border else MaterialTheme.colorScheme.outlineVariant
+    val primary = if (isDarkMode) ToolColors.Primary else MaterialTheme.colorScheme.primary
+    val textPrimary = if (isDarkMode) ToolColors.TextPrimary else MaterialTheme.colorScheme.onSurface
+    val textSecondary = if (isDarkMode) ToolColors.TextSecondary else MaterialTheme.colorScheme.onSurfaceVariant
 
-    val chipSelectedBg = if (isDarkMode) BatchColors.Primary.copy(alpha = 0.12f)
+    val chipSelectedBg = if (isDarkMode) ToolColors.Primary.copy(alpha = 0.12f)
     else MaterialTheme.colorScheme.primaryContainer
-    val chipSelectedBorder = if (isDarkMode) BatchColors.Primary
+    val chipSelectedBorder = if (isDarkMode) ToolColors.Primary
     else MaterialTheme.colorScheme.primary
-    val chipUnselectedBorder = if (isDarkMode) BatchColors.Border
+    val chipUnselectedBorder = if (isDarkMode) ToolColors.Border
     else MaterialTheme.colorScheme.outlineVariant
 
     val counterColor = when {
         urlText.length >= 190 -> Color(0xFFEF4444)
-        urlText.length >= 160 -> BatchColors.Warning
+        urlText.length >= 160 -> ToolColors.Warning
         else -> textSecondary.copy(alpha = 0.6f)
     }
 
@@ -262,7 +246,7 @@ fun BatchUrlImportPage(
                                 .clip(RoundedCornerShape(25.dp))
                                 .then(
                                     if (detectedUrls.isNotEmpty())
-                                        Modifier.background(GradientBrush)
+                                        Modifier.background(ToolGradientBrush)
                                     else
                                         Modifier.background(surfaceVariant)
                                 ),
@@ -275,7 +259,7 @@ fun BatchUrlImportPage(
                                     Icons.Filled.Download,
                                     contentDescription = null,
                                     modifier = Modifier.size(18.dp),
-                                    tint = if (detectedUrls.isNotEmpty()) Color.White
+                                    tint = if (detectedUrls.isNotEmpty()) Color(0xFF121212)
                                     else textSecondary.copy(alpha = 0.5f),
                                 )
                                 Spacer(Modifier.width(8.dp))
@@ -285,7 +269,7 @@ fun BatchUrlImportPage(
                                     style = MaterialTheme.typography.titleSmall.copy(
                                         fontWeight = FontWeight.SemiBold,
                                     ),
-                                    color = if (detectedUrls.isNotEmpty()) Color.White
+                                    color = if (detectedUrls.isNotEmpty()) Color(0xFF121212)
                                     else textSecondary.copy(alpha = 0.5f),
                                 )
                             }

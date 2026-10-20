@@ -16,5 +16,7 @@
 .cxx
 local.properties
 /keystore.properties
+*.jks
+SIGNING_KEY_BASE64.txt
 .kotlin
 .kilo/kilo.jsonc

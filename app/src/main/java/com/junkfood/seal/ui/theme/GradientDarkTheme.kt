@@ -26,36 +26,38 @@ import androidx.compose.ui.unit.dp
  * Deep charcoal and obsidian backgrounds with vibrant linear gradients
  */
 object GradientDarkColors {
-    // Deep Charcoal and Obsidian Backgrounds
-    val Background = Color(0xFF0A0A0F)
-    val Surface = Color(0xFF14141F)
-    val SurfaceVariant = Color(0xFF1A1A2E)
-    val SurfaceContainer = Color(0xFF1E1E2F)
-    val SurfaceContainerLow = Color(0xFF16162A)
-    val SurfaceContainerHigh = Color(0xFF25253A)
-    
-    // Vibrant Gradient Colors - Deep Blues and Purples
-    val GradientPrimaryStart = Color(0xFF5B47E5)
-    val GradientPrimaryEnd = Color(0xFF8B5CF6)
-    val GradientSecondaryStart = Color(0xFF3B82F6)
-    val GradientSecondaryEnd = Color(0xFF6366F1)
-    val GradientAccentStart = Color(0xFFA855F7)
-    val GradientAccentEnd = Color(0xFFEC4899)
-    
+    // Near-black backgrounds
+    val Background = Color(0xFF0A0A0A)
+    val Surface = Color(0xFF141414)
+    val SurfaceVariant = Color(0xFF1E1E1E)
+    val SurfaceContainer = Color(0xFF1C1C1C)
+    val SurfaceContainerLow = Color(0xFF161616)
+    val SurfaceContainerHigh = Color(0xFF242424)
+
+    // Flat Two-Tone - dark start, light end
+    val GradientPrimaryStart = Color(0xFF2A2A2A)
+    val GradientPrimaryEnd = Color(0xFFE0E0E0)
+    val GradientSecondaryStart = Color(0xFF242424)
+    val GradientSecondaryEnd = Color(0xFFD6D6D6)
+    val GradientAccentStart = Color(0xFF333333)
+    val GradientAccentEnd = Color(0xFFFFFFFF)
+
     // Glassmorphism Colors
     val GlassWhiteBorder = Color(0x1AFFFFFF)
     val GlassSurface = Color(0x0DFFFFFF)
     val GlassSurfaceVariant = Color(0x1AFFFFFF)
-    
+
     // Text Colors
     val OnBackground = Color(0xFFFAFAFA)
     val OnSurface = Color(0xFFF5F5F5)
     val OnPrimary = Color(0xFFFFFFFF)
-    
+    // Dark text for use on light (End-tier) backgrounds
+    val OnAccentDark = Color(0xFF121212)
+
     // Additional Accent Colors
-    val GradientCyan = Color(0xFF22D3EE)
-    val GradientPurpleBright = Color(0xFFC084FC)
-    val GradientBlueBright = Color(0xFF60A5FA)
+    val GradientCyan = Color(0xFFBFBFBF)
+    val GradientPurpleBright = Color(0xFFE8E8E8)
+    val GradientBlueBright = Color(0xFFD0D0D0)
 }
 
 /**

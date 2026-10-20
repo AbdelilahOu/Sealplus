@@ -8,6 +8,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
@@ -19,6 +20,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.toggleable
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Check
 import androidx.compose.material.icons.outlined.Info
@@ -74,6 +76,25 @@ private val PreferenceTitleVariant: TextStyle
 private val PreferenceTitle
     @Composable get() = MaterialTheme.typography.titleMedium
 
+/** Shared surface color for preference rows: transparent when nested in a [SettingsGroupCard]. */
+private val preferenceSurfaceColor: Color
+    @Composable get() =
+        if (LocalInSettingsGroup.current) Color.Transparent else MaterialTheme.colorScheme.surface
+
+@Composable
+private fun PreferenceIconChip(content: @Composable () -> Unit) {
+    Box(
+        modifier =
+            Modifier.padding(start = 8.dp, end = 16.dp)
+                .size(36.dp)
+                .clip(RoundedCornerShape(10.dp))
+                .background(MaterialTheme.colorScheme.surfaceContainerHigh),
+        contentAlignment = Alignment.Center,
+    ) {
+        content()
+    }
+}
+
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun PreferenceItem(
@@ -89,6 +110,7 @@ fun PreferenceItem(
     onClick: () -> Unit = {},
 ) {
     Surface(
+        color = preferenceSurfaceColor,
         modifier =
             Modifier.combinedClickable(
                 onClick = onClick,
@@ -106,21 +128,25 @@ fun PreferenceItem(
 
             when (icon) {
                 is ImageVector -> {
-                    Icon(
-                        imageVector = icon,
-                        contentDescription = null,
-                        modifier = Modifier.padding(start = 8.dp, end = 16.dp).size(24.dp),
-                        tint = ThemedIconColors.primary(enabled),
-                    )
+                    PreferenceIconChip {
+                        Icon(
+                            imageVector = icon,
+                            contentDescription = null,
+                            modifier = Modifier.size(20.dp),
+                            tint = ThemedIconColors.primary(enabled),
+                        )
+                    }
                 }
 
                 is Painter -> {
-                    Icon(
-                        painter = icon,
-                        contentDescription = null,
-                        modifier = Modifier.padding(start = 8.dp, end = 16.dp).size(24.dp),
-                        tint = ThemedIconColors.primary(enabled),
-                    )
+                    PreferenceIconChip {
+                        Icon(
+                            painter = icon,
+                            contentDescription = null,
+                            modifier = Modifier.size(20.dp),
+                            tint = ThemedIconColors.primary(enabled),
+                        )
+                    }
                 }
             }
 
@@ -188,6 +214,7 @@ fun PreferenceItemVariant(
     onClick: () -> Unit = {},
 ) {
     Surface(
+        color = preferenceSurfaceColor,
         modifier =
             Modifier.combinedClickable(
                 enabled = enabled,
@@ -202,12 +229,14 @@ fun PreferenceItemVariant(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             icon?.let {
-                Icon(
-                    imageVector = icon,
-                    contentDescription = null,
-                    modifier = Modifier.padding(start = 8.dp, end = 16.dp).size(24.dp),
-                    tint = ThemedIconColors.primary(enabled),
-                )
+                PreferenceIconChip {
+                    Icon(
+                        imageVector = icon,
+                        contentDescription = null,
+                        modifier = Modifier.size(20.dp),
+                        tint = ThemedIconColors.primary(enabled),
+                    )
+                }
             }
             Column(
                 modifier =
@@ -353,6 +382,7 @@ fun PreferenceSwitchVariant(
 
     val interactionSource = remember { MutableInteractionSource() }
     Surface(
+        color = preferenceSurfaceColor,
         modifier =
             Modifier.toggleable(
                 value = isChecked,
@@ -370,12 +400,14 @@ fun PreferenceSwitchVariant(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             icon?.let {
-                Icon(
-                    imageVector = icon,
-                    contentDescription = null,
-                    modifier = Modifier.padding(start = 8.dp, end = 16.dp).size(24.dp),
-                    tint = ThemedIconColors.primary(enabled),
-                )
+                PreferenceIconChip {
+                    Icon(
+                        imageVector = icon,
+                        contentDescription = null,
+                        modifier = Modifier.size(20.dp),
+                        tint = ThemedIconColors.primary(enabled),
+                    )
+                }
             }
             Column(modifier = Modifier.weight(1f)) {
                 PreferenceItemTitle(text = title, enabled = enabled, style = PreferenceTitleVariant)
@@ -407,6 +439,7 @@ fun PreferenceSwitch(
 
     val interactionSource = remember { MutableInteractionSource() }
     Surface(
+        color = preferenceSurfaceColor,
         modifier =
             Modifier.toggleable(
                 value = isChecked,
@@ -424,12 +457,14 @@ fun PreferenceSwitch(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             icon?.let {
-                Icon(
-                    imageVector = icon,
-                    contentDescription = null,
-                    modifier = Modifier.padding(start = 8.dp, end = 16.dp).size(24.dp),
-                    tint = ThemedIconColors.primary(enabled),
-                )
+                PreferenceIconChip {
+                    Icon(
+                        imageVector = icon,
+                        contentDescription = null,
+                        modifier = Modifier.size(20.dp),
+                        tint = ThemedIconColors.primary(enabled),
+                    )
+                }
             }
             Column(modifier = Modifier.weight(1f)) {
                 PreferenceItemTitle(text = title, enabled = enabled)
@@ -462,6 +497,7 @@ fun PreferenceSwitchWithDivider(
 ) {
 
     Surface(
+        color = preferenceSurfaceColor,
         modifier =
             Modifier.clickable(
                 enabled = enabled,
@@ -477,12 +513,14 @@ fun PreferenceSwitchWithDivider(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             icon?.let {
-                Icon(
-                    imageVector = icon,
-                    contentDescription = null,
-                    modifier = Modifier.padding(start = 8.dp, end = 16.dp).size(24.dp),
-                    tint = ThemedIconColors.primary(enabled),
-                )
+                PreferenceIconChip {
+                    Icon(
+                        imageVector = icon,
+                        contentDescription = null,
+                        modifier = Modifier.size(20.dp),
+                        tint = ThemedIconColors.primary(enabled),
+                    )
+                }
             }
             Column(modifier = Modifier.weight(1f)) {
                 PreferenceItemTitle(text = title, enabled = enabled)

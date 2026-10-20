@@ -1,20 +1,15 @@
 package com.junkfood.seal.ui.page
 
 import android.webkit.CookieManager
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.DrawerValue
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.rememberDrawerState
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
@@ -31,7 +26,6 @@ import androidx.navigation.navigation
 import com.junkfood.seal.App
 import com.junkfood.seal.R
 import com.junkfood.seal.ui.common.HapticFeedback.slightHapticFeedback
-import com.junkfood.seal.ui.common.LocalWindowWidthState
 import com.junkfood.seal.ui.common.Route
 import com.junkfood.seal.ui.common.animatedComposable
 import com.junkfood.seal.ui.common.animatedComposableVariant
@@ -46,9 +40,6 @@ import com.junkfood.seal.ui.page.onboarding.OnboardingScreen
 import com.junkfood.seal.ui.page.settings.SettingsPage
 import com.junkfood.seal.ui.page.settings.about.AboutPage
 import com.junkfood.seal.ui.page.settings.about.CreditsPage
-import com.junkfood.seal.ui.page.settings.about.CryptoDonationPage
-import com.junkfood.seal.ui.page.settings.about.SponsorsPage
-import com.junkfood.seal.ui.page.settings.about.SupportDeveloperPage
 import com.junkfood.seal.ui.page.settings.about.UpdatePage
 import com.junkfood.seal.ui.page.settings.appearance.AppearancePreferences
 import com.junkfood.seal.ui.page.settings.appearance.DarkThemePreferences
@@ -75,14 +66,14 @@ import com.junkfood.seal.ui.page.tools.CommentDetailPage
 import com.junkfood.seal.ui.page.tools.CommentDownloadPage
 import com.junkfood.seal.ui.page.tools.ThumbnailDownloadPage
 import com.junkfood.seal.ui.page.tools.VideoInfoDetailPage
+import com.junkfood.seal.ui.page.home.BottomNavBar
 import com.junkfood.seal.ui.page.tools.VideoInfoDownloadPage
-import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
 private const val TAG = "HomeEntry"
 
 private val TopDestinations =
-    listOf(Route.HOME, Route.TASK_LIST, Route.SETTINGS_PAGE, Route.DOWNLOADS, Route.MORE_TOOLS)
+    listOf(Route.HOME, Route.DOWNLOADS, Route.MORE_TOOLS, Route.SETTINGS_PAGE)
 
 @Composable
 fun AppEntry(dialogViewModel: DownloadDialogViewModel) {
@@ -90,14 +81,11 @@ fun AppEntry(dialogViewModel: DownloadDialogViewModel) {
     val navController = rememberNavController()
     val context = LocalContext.current
     val view = LocalView.current
-    val windowWidth = LocalWindowWidthState.current
     val sheetState by dialogViewModel.sheetStateFlow.collectAsStateWithLifecycle()
     val cookiesViewModel: CookiesViewModel = koinViewModel()
 
-    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val versionReport = App.packageInfo.versionName.toString()
     val appName = stringResource(R.string.app_name)
-    val scope = rememberCoroutineScope()
 
     val onNavigateBack: () -> Unit = {
         with(navController) {
@@ -122,103 +110,90 @@ fun AppEntry(dialogViewModel: DownloadDialogViewModel) {
         }
     }
 
-    Box(modifier = Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background)) {
-        NavigationDrawer(
-            windowWidth = windowWidth,
-            drawerState = drawerState,
-            currentRoute = currentRoute,
-            currentTopDestination = currentTopDestination,
-            showQuickSettings = true,
-            gesturesEnabled = currentRoute == Route.HOME,
-            onDismissRequest = { drawerState.close() },
-            onNavigateToRoute = {
-                if (currentRoute != it) {
-                    navController.navigate(it) {
-                        launchSingleTop = true
-                        popUpTo(route = Route.HOME)
-                    }
-                }
-            },
+    Scaffold(
+        modifier = Modifier.fillMaxSize(),
+        bottomBar = {
+            if (currentRoute != Route.ONBOARDING) {
+                BottomNavBar(
+                    currentRoute = currentTopDestination,
+                    onNavigate = {
+                        if (currentRoute != it) {
+                            navController.navigate(it) {
+                                launchSingleTop = true
+                                popUpTo(route = Route.HOME)
+                            }
+                        }
+                    },
+                )
+            }
+        },
+    ) { padding ->
+        NavHost(
+            modifier = Modifier.padding(padding),
+            navController = navController,
+            startDestination = Route.HOME,
         ) {
-            NavHost(
-                modifier = Modifier.align(Alignment.Center),
-                navController = navController,
-                startDestination = Route.HOME,
-            ) {
-                animatedComposable(Route.HOME) {
-                    NewHomePage(
-                        dialogViewModel = dialogViewModel,
-                        onMenuOpen = {
-                            view.slightHapticFeedback()
-                            scope.launch { drawerState.open() }
-                        },
-                        onNavigateToDownloads = {
-                            view.slightHapticFeedback()
-                            navController.navigate(Route.DOWNLOADS) {
-                                launchSingleTop = true
-                            }
-                        },
-                        onNavigateToSupport = {
-                            view.slightHapticFeedback()
-                            navController.navigate(Route.DONATE) {
-                                launchSingleTop = true
-                            }
-                        },
-                        onNavigateToBatchUrlImport = {
-                            navController.navigate(Route.BATCH_URL_IMPORT) {
-                                launchSingleTop = true
-                            }
-                        },
-                        onNavigateToVideoInfoDownload = {
-                            navController.navigate(Route.VIDEO_INFO_DOWNLOAD) {
-                                launchSingleTop = true
-                            }
-                        },
-                        onNavigateToThumbnailDownload = {
-                            navController.navigate(Route.THUMBNAIL_DOWNLOAD) {
-                                launchSingleTop = true
-                            }
-                        },
-                        onNavigateToCommentDownload = {
-                            navController.navigate(Route.COMMENT_DOWNLOAD) {
-                                launchSingleTop = true
-                            }
-                        },
-                    )
-                }
-                animatedComposable(Route.DOWNLOADS) { VideoListPage { onNavigateBack() } }
-                animatedComposableVariant(Route.TASK_LIST) {
-                    TaskListPage(
-                        onNavigateBack = onNavigateBack,
-                        onNavigateToDetail = { navController.navigate(Route.TASK_LOG id it) },
-                    )
-                }
-                animatedComposable(Route.MORE_TOOLS) {
-                    MoreToolsPage(
-                        onNavigateBack = onNavigateBack,
-                        onNavigateToBatchUrlImport = {
-                            navController.navigate(Route.BATCH_URL_IMPORT) {
-                                launchSingleTop = true
-                            }
-                        },
-                        onNavigateToVideoInfoDownload = {
-                            navController.navigate(Route.VIDEO_INFO_DOWNLOAD) {
-                                launchSingleTop = true
-                            }
-                        },
-                        onNavigateToThumbnailDownload = {
-                            navController.navigate(Route.THUMBNAIL_DOWNLOAD) {
-                                launchSingleTop = true
-                            }
-                        },
-                        onNavigateToCommentDownload = {
-                            navController.navigate(Route.COMMENT_DOWNLOAD) {
-                                launchSingleTop = true
-                            }
-                        },
-                    )
-                }
-                animatedComposable(Route.THUMBNAIL_DOWNLOAD) {
+            animatedComposable(Route.HOME) {
+                NewHomePage(
+                    dialogViewModel = dialogViewModel,
+                    onNavigateToBatchUrlImport = {
+                        navController.navigate(Route.BATCH_URL_IMPORT) {
+                            launchSingleTop = true
+                        }
+                    },
+                    onNavigateToVideoInfoDownload = {
+                        navController.navigate(Route.VIDEO_INFO_DOWNLOAD) {
+                            launchSingleTop = true
+                        }
+                    },
+                    onNavigateToThumbnailDownload = {
+                        navController.navigate(Route.THUMBNAIL_DOWNLOAD) {
+                            launchSingleTop = true
+                        }
+                    },
+                    onNavigateToCommentDownload = {
+                        navController.navigate(Route.COMMENT_DOWNLOAD) {
+                            launchSingleTop = true
+                        }
+                    },
+                )
+            }
+            animatedComposable(Route.DOWNLOADS) { VideoListPage { onNavigateBack() } }
+            animatedComposableVariant(Route.TASK_LIST) {
+                TaskListPage(
+                    onNavigateBack = onNavigateBack,
+                    onNavigateToDetail = { navController.navigate(Route.TASK_LOG id it) },
+                )
+            }
+            animatedComposable(Route.MORE_TOOLS) {
+                MoreToolsPage(
+                    onNavigateBack = onNavigateBack,
+                    onNavigateToTaskList = {
+                        navController.navigate(Route.TASK_LIST) { launchSingleTop = true }
+                    },
+                    onNavigateToBatchUrlImport = {
+                        navController.navigate(Route.BATCH_URL_IMPORT) {
+                            launchSingleTop = true
+                        }
+                    },
+                    onNavigateToVideoInfoDownload = {
+                        navController.navigate(Route.VIDEO_INFO_DOWNLOAD) {
+                            launchSingleTop = true
+                        }
+                    },
+                    onNavigateToThumbnailDownload = {
+                        navController.navigate(Route.THUMBNAIL_DOWNLOAD) {
+                            launchSingleTop = true
+                        }
+                    },
+                    onNavigateToCommentDownload = {
+                        navController.navigate(Route.COMMENT_DOWNLOAD) {
+                            launchSingleTop = true
+                        }
+                    },
+                )
+            }
+            animatedComposable(Route.THUMBNAIL_DOWNLOAD) {
                     ThumbnailDownloadPage(onNavigateBack = onNavigateBack)
                 }
                 animatedComposable(Route.COMMENT_DOWNLOAD) {
@@ -281,11 +256,10 @@ fun AppEntry(dialogViewModel: DownloadDialogViewModel) {
                     },
                     cookiesViewModel = cookiesViewModel,
                 )
-            }
-
-            AppUpdater()
-            YtdlpUpdater()
         }
+
+        AppUpdater()
+        YtdlpUpdater()
     }
 }
 
@@ -317,19 +291,9 @@ fun NavGraphBuilder.settingsGraph(
                 onNavigateBack = onNavigateBack,
                 onNavigateToCreditsPage = { onNavigateTo(Route.CREDITS) },
                 onNavigateToUpdatePage = { onNavigateTo(Route.AUTO_UPDATE) },
-                onNavigateToDonatePage = { onNavigateTo(Route.DONATE) },
                 onNavigateToOnboarding = { onNavigateTo(Route.ONBOARDING) },
             )
         }
-        animatedComposable(Route.DONATE) {
-            SupportDeveloperPage(
-                onNavigateBack = onNavigateBack,
-                onNavigateToSponsors = { onNavigateTo(Route.SPONSORS) },
-                onNavigateToCrypto = { onNavigateTo(Route.CRYPTO_DONATION) }
-            )
-        }
-        animatedComposable(Route.SPONSORS) { SponsorsPage(onNavigateBack = onNavigateBack) }
-        animatedComposable(Route.CRYPTO_DONATION) { CryptoDonationPage(onNavigateBack = onNavigateBack) }
         animatedComposable(Route.CREDITS) { CreditsPage(onNavigateBack) }
         animatedComposable(Route.AUTO_UPDATE) { UpdatePage(onNavigateBack) }
         animatedComposable(Route.APPEARANCE) {

@@ -38,7 +38,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.FileDownload
-import androidx.compose.material.icons.outlined.AttachMoney
 import androidx.compose.material.icons.outlined.BatteryChargingFull
 import androidx.compose.material.icons.outlined.BrokenImage
 import androidx.compose.material.icons.outlined.Cancel
@@ -49,14 +48,12 @@ import androidx.compose.material.icons.outlined.Replay
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.Description
 import androidx.compose.material.icons.outlined.ExitToApp
-import androidx.compose.material.icons.outlined.FileDownload
 import androidx.compose.material.icons.outlined.Folder
 import androidx.compose.material.icons.outlined.HighQuality
 import androidx.compose.material.icons.outlined.Image
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Language
 import androidx.compose.material.icons.outlined.Link
-import androidx.compose.material.icons.outlined.Menu
 import androidx.compose.material.icons.outlined.MoreVert
 import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material.icons.outlined.Pause
@@ -155,10 +152,6 @@ import com.junkfood.seal.util.toFileSizeText
 import com.junkfood.seal.util.getErrorReport
 import com.junkfood.seal.util.makeToast
 import com.junkfood.seal.util.matchUrlFromClipboard
-import com.junkfood.seal.util.SPONSOR_DIALOG_FREQUENCY
-import com.junkfood.seal.util.SPONSOR_DIALOG_LAST_SHOWN
-import com.junkfood.seal.util.SPONSOR_FREQ_OFF
-import com.junkfood.seal.util.SPONSOR_FREQ_WEEKLY
 import com.junkfood.seal.util.BATTERY_POPUP_HIDDEN
 import com.junkfood.seal.util.BatteryUtil
 import com.junkfood.seal.util.PreferenceUtil.getBoolean
@@ -199,9 +192,6 @@ import org.koin.compose.koinInject
 @Composable
 fun NewHomePage(
     modifier: Modifier = Modifier,
-    onMenuOpen: () -> Unit = {},
-    onNavigateToDownloads: () -> Unit = {},
-    onNavigateToSupport: () -> Unit = {},
     onNavigateToBatchUrlImport: () -> Unit = {},
     onNavigateToVideoInfoDownload: () -> Unit = {},
     onNavigateToThumbnailDownload: () -> Unit = {},
@@ -259,7 +249,6 @@ fun NewHomePage(
     var showNotificationPermissionDialog by remember { mutableStateOf(false) }
     var showBatteryOptimizationDialog by remember { mutableStateOf(false) }
     var permissionsChecked by remember { mutableStateOf(false) }
-    var showSponsorDialog by remember { mutableStateOf(false) }
     
     // Check notification permission
     val hasNotificationPermission = remember(lifecycleRefreshTrigger) {
@@ -328,20 +317,6 @@ fun NewHomePage(
                 showNotificationPermissionDialog = true
             } else if (shouldPromptBatteryDialog()) {
                 showBatteryOptimizationDialog = true
-            }
-        }
-        // Sponsor support dialog — delay slightly so permissions dialogs get priority
-        delay(600L)
-        val frequency = SPONSOR_DIALOG_FREQUENCY.getInt()
-        if (frequency != SPONSOR_FREQ_OFF) {
-            val lastShown = SPONSOR_DIALOG_LAST_SHOWN.getLong()
-            val intervalMs = if (frequency == SPONSOR_FREQ_WEEKLY)
-                7L * 24 * 60 * 60 * 1000
-            else
-                30L * 24 * 60 * 60 * 1000
-            val now = System.currentTimeMillis()
-            if (lastShown == 0L || now - lastShown >= intervalMs) {
-                showSponsorDialog = true
             }
         }
     }
@@ -692,21 +667,6 @@ fun NewHomePage(
         )
     }
 
-    // Sponsor support dialog
-    if (showSponsorDialog) {
-        SponsorSupportDialog(
-            onDismiss = {
-                showSponsorDialog = false
-                SPONSOR_DIALOG_LAST_SHOWN.updateLong(System.currentTimeMillis())
-            },
-            onSupport = {
-                showSponsorDialog = false
-                SPONSOR_DIALOG_LAST_SHOWN.updateLong(System.currentTimeMillis())
-                onNavigateToSupport()
-            },
-        )
-    }
-
     // Exit confirmation dialog
     if (showExitDialog) {
         AlertDialog(
@@ -735,37 +695,12 @@ fun NewHomePage(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { 
+                title = {
                     Text(
                         text = stringResource(R.string.home),
                         style = MaterialTheme.typography.titleLarge,
                         fontWeight = FontWeight.SemiBold
                     )
-                },
-                navigationIcon = {
-                    IconButton(onClick = onMenuOpen) {
-                        Icon(
-                            imageVector = Icons.Outlined.Menu,
-                            contentDescription = "Menu",
-                            tint = MaterialTheme.colorScheme.primary
-                        )
-                    }
-                },
-                actions = {
-                    IconButton(onClick = onNavigateToSupport) {
-                        Icon(
-                            imageVector = Icons.Outlined.AttachMoney,
-                            contentDescription = "Support Developer",
-                            tint = MaterialTheme.colorScheme.secondary
-                        )
-                    }
-                    IconButton(onClick = onNavigateToDownloads) {
-                        Icon(
-                            imageVector = Icons.Outlined.FileDownload,
-                            contentDescription = stringResource(R.string.downloads_history),
-                            tint = MaterialTheme.colorScheme.primary
-                        )
-                    }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = Color.Transparent
@@ -1212,44 +1147,6 @@ fun URLInputField(
     val isGradientDark = LocalGradientDarkMode.current
     val fullPlaceholder = stringResource(R.string.enter_url_to_download)
 
-    // Typewriter animation: reveal characters one by one
-    var displayedLength by remember { mutableStateOf(0) }
-    
-    LaunchedEffect(Unit) {
-        displayedLength = 0
-        for (i in 1..fullPlaceholder.length) {
-            delay(50L)
-            displayedLength = i
-        }
-    }
-
-    // Gradient animation for the placeholder text
-    val infiniteTransition = rememberInfiniteTransition(label = "placeholderGradient")
-    val gradientShift by infiniteTransition.animateFloat(
-        initialValue = 0f,
-        targetValue = 1000f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(durationMillis = 3000, easing = LinearEasing),
-            repeatMode = RepeatMode.Restart
-        ),
-        label = "placeholderShift"
-    )
-
-    val gradientColors = listOf(
-        MaterialTheme.colorScheme.primary,
-        MaterialTheme.colorScheme.tertiary,
-        MaterialTheme.colorScheme.secondary,
-        MaterialTheme.colorScheme.tertiary,
-        MaterialTheme.colorScheme.primary,
-    )
-
-    val gradientBrush = Brush.linearGradient(
-        colors = gradientColors,
-        start = Offset(gradientShift, 0f),
-        end = Offset(gradientShift + 400f, 0f),
-        tileMode = TileMode.Mirror
-    )
-    
     OutlinedTextField(
         value = value,
         onValueChange = onValueChange,
@@ -1258,14 +1155,13 @@ fun URLInputField(
             .height(64.dp),
         placeholder = {
             Text(
-                text = fullPlaceholder.take(displayedLength),
-                style = MaterialTheme.typography.bodyLarge.merge(
-                    TextStyle(brush = gradientBrush)
-                )
+                text = fullPlaceholder,
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
         },
         singleLine = true,
-        shape = RoundedCornerShape(32.dp),
+        shape = RoundedCornerShape(16.dp),
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
         keyboardActions = KeyboardActions(onDone = { onDownloadClick() }),
         trailingIcon = {
@@ -1305,12 +1201,10 @@ fun URLInputField(
             }
         },
         colors = OutlinedTextFieldDefaults.colors(
-            focusedBorderColor = if (isGradientDark && isDarkTheme) {
-                GradientDarkColors.GradientPrimaryStart
-            } else {
-                MaterialTheme.colorScheme.primary
-            },
-            unfocusedBorderColor = MaterialTheme.colorScheme.outline
+            focusedBorderColor = Color.Transparent,
+            unfocusedBorderColor = Color.Transparent,
+            focusedContainerColor = MaterialTheme.colorScheme.surfaceContainer,
+            unfocusedContainerColor = MaterialTheme.colorScheme.surfaceContainer,
         )
     )
 }
