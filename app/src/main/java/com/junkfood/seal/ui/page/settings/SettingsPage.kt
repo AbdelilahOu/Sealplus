@@ -8,6 +8,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumn
@@ -118,7 +119,11 @@ fun SettingsPage(onNavigateBack: () -> Unit, onNavigateTo: (String) -> Unit) {
     ) {
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
-            contentPadding = it,
+            contentPadding =
+                PaddingValues(
+                    top = it.calculateTopPadding(),
+                    bottom = it.calculateBottomPadding() + 100.dp,
+                ),
         ) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 item {

@@ -1,7 +1,9 @@
 package com.junkfood.seal.ui.page.home
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -19,15 +21,18 @@ import androidx.compose.material.icons.outlined.Home
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import com.junkfood.seal.ui.common.Route
+import dev.chrisbanes.haze.HazeState
+import dev.chrisbanes.haze.HazeTint
+import dev.chrisbanes.haze.hazeEffect
 
 private data class NavDestination(
     val route: String,
@@ -59,20 +64,44 @@ private val destinations =
         ),
     )
 
-/** Floating pill-shaped bottom navigation bar with 4 top-level destinations. */
+/**
+ * Floating pill-shaped bottom navigation bar with 4 top-level destinations. The bar itself is
+ * a frosted-glass blur of whatever scrolls behind it (via [hazeState], shared with the screen
+ * content's [dev.chrisbanes.haze.hazeSource]) — the area around it stays fully transparent,
+ * matching Nuvio's floating nav bar technique.
+ */
 @Composable
-fun BottomNavBar(currentRoute: String?, onNavigate: (String) -> Unit, modifier: Modifier = Modifier) {
+fun BottomNavBar(
+    currentRoute: String?,
+    onNavigate: (String) -> Unit,
+    hazeState: HazeState? = null,
+    modifier: Modifier = Modifier,
+) {
+    val tintColor = MaterialTheme.colorScheme.surfaceContainer
+    val borderColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.08f)
+
     Box(modifier = modifier.fillMaxWidth().padding(horizontal = 24.dp, vertical = 16.dp)) {
-        Surface(
-            modifier = Modifier.fillMaxWidth(),
-            shape = RoundedCornerShape(32.dp),
-            color = MaterialTheme.colorScheme.surfaceContainer,
-            tonalElevation = 3.dp,
-            shadowElevation = 6.dp,
+        Box(
+            modifier =
+                Modifier.fillMaxWidth()
+                    .clip(RoundedCornerShape(32.dp))
+                    .then(
+                        if (hazeState != null) {
+                            Modifier.hazeEffect(state = hazeState) {
+                                blurRadius = 24.dp
+                                backgroundColor = tintColor
+                                tints = listOf(HazeTint(tintColor.copy(alpha = 0.55f)))
+                                noiseFactor = 0f
+                            }
+                        } else {
+                            Modifier.background(tintColor)
+                        }
+                    )
+                    .border(width = 1.dp, color = borderColor, shape = RoundedCornerShape(32.dp))
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp, vertical = 8.dp),
-                horizontalArrangement = androidx.compose.foundation.layout.Arrangement.SpaceEvenly,
+                horizontalArrangement = Arrangement.SpaceEvenly,
             ) {
                 destinations.forEach { destination ->
                     val selected = destination.route == currentRoute
@@ -100,7 +129,7 @@ private fun NavItem(
             Modifier.clip(RoundedCornerShape(24.dp))
                 .background(
                     if (selected) MaterialTheme.colorScheme.surfaceContainerHigh
-                    else androidx.compose.ui.graphics.Color.Transparent
+                    else Color.Transparent
                 )
                 .clickable(onClick = onClick)
                 .padding(horizontal = 12.dp, vertical = 8.dp),
