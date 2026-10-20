@@ -39,6 +39,7 @@ import androidx.compose.material.icons.outlined.Description
 import androidx.compose.material.icons.outlined.Image
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.PlaylistAdd
+import androidx.compose.material.icons.outlined.Terminal
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -132,12 +133,21 @@ private val tools = listOf(
         icon = Icons.Outlined.Chat,
         isComingSoon = false,
     ),
+    ToolItem(
+        id = 5,
+        titleRes = R.string.custom_command,
+        shortDescRes = R.string.custom_command_desc,
+        descRes = R.string.custom_command_desc,
+        icon = Icons.Outlined.Terminal,
+        isComingSoon = false,
+    ),
 )
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MoreToolsPage(
     onNavigateBack: () -> Unit,
+    onNavigateToTaskList: (() -> Unit)? = null,
     onNavigateToBatchUrlImport: (() -> Unit)? = null,
     onNavigateToVideoInfoDownload: (() -> Unit)? = null,
     onNavigateToThumbnailDownload: (() -> Unit)? = null,
@@ -208,6 +218,7 @@ fun MoreToolsPage(
                                 2 -> onNavigateToVideoInfoDownload?.invoke()
                                 3 -> onNavigateToCommentDownload?.invoke()
                                 4 -> onNavigateToThumbnailDownload?.invoke()
+                                5 -> onNavigateToTaskList?.invoke()
                                 else -> {
                                     context.makeToast(
                                         "${context.getString(tool.titleRes)} — ${context.getString(R.string.feature_unavailable)}"

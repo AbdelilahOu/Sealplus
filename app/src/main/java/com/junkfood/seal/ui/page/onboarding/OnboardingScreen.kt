@@ -23,10 +23,8 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
@@ -34,7 +32,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.junkfood.seal.ui.common.LocalDarkTheme
-import com.junkfood.seal.ui.theme.GradientBrushes
 import com.junkfood.seal.ui.theme.GradientDarkColors
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -46,7 +43,6 @@ data class OnboardingPage(
     val icon: ImageVector,
     val title: String,
     val description: String,
-    val gradient: Brush
 )
 
 /**
@@ -64,31 +60,27 @@ fun OnboardingScreen(
             icon = Icons.Filled.VideoLibrary,
             title = "Welcome to Seal Plus",
             description = "Your ultimate video downloader powered by yt-dlp. Download videos, audio, and playlists from your favorite platforms with ease.",
-            gradient = GradientBrushes.Primary
         ),
         OnboardingPage(
             icon = Icons.Filled.Download,
             title = "Powerful Downloads",
             description = "Download in multiple formats and quality options. Choose from video, audio-only, or custom formats with advanced configuration.",
-            gradient = GradientBrushes.Secondary
         ),
         OnboardingPage(
             icon = Icons.Filled.Settings,
             title = "Highly Customizable",
             description = "Extensive settings to personalize your experience. Control download directory, network preferences, themes, and much more.",
-            gradient = GradientBrushes.Accent
         ),
         OnboardingPage(
             icon = Icons.Filled.Security,
             title = "Privacy & Security",
             description = "Your downloads are private and secure. Optional app lock with PIN or biometric authentication keeps your content safe.",
-            gradient = GradientBrushes.Vibrant
         )
     )
-    
+
     val pagerState = rememberPagerState(pageCount = { pages.size })
     val scope = rememberCoroutineScope()
-    
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -97,12 +89,6 @@ fun OnboardingScreen(
                 else MaterialTheme.colorScheme.background
             )
     ) {
-        // Animated background gradient blobs
-        AnimatedBackgroundGradient(
-            currentPage = pagerState.currentPage,
-            isDarkTheme = isDarkTheme
-        )
-        
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -281,48 +267,26 @@ fun OnboardingPageContent(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        // Icon with gradient background and glow effect
+        // Icon in a plain neutral badge — differentiated by icon choice, not color
         Box(
             modifier = Modifier
-                .size(140.dp)
-                .scale(iconScale),
+                .size(120.dp)
+                .scale(iconScale)
+                .clip(CircleShape)
+                .background(
+                    if (isDarkTheme) GradientDarkColors.SurfaceContainer
+                    else MaterialTheme.colorScheme.surfaceContainerHigh
+                ),
             contentAlignment = Alignment.Center
         ) {
-            // Glow effect
-            Box(
-                modifier = Modifier
-                    .size(160.dp)
-                    .alpha(0.4f)
-                    .blur(20.dp)
-                    .background(
-                        brush = page.gradient,
-                        shape = CircleShape
-                    )
+            Icon(
+                imageVector = page.icon,
+                contentDescription = null,
+                modifier = Modifier.size(56.dp),
+                tint =
+                    if (isDarkTheme) GradientDarkColors.OnBackground
+                    else MaterialTheme.colorScheme.onSurface
             )
-            
-            // Icon container
-            Box(
-                modifier = Modifier
-                    .size(120.dp)
-                    .clip(CircleShape)
-                    .background(
-                        if (isDarkTheme)
-                            GradientDarkColors.SurfaceContainer
-                        else
-                            MaterialTheme.colorScheme.surfaceContainerHigh
-                    )
-                    .padding(2.dp)
-                    .clip(CircleShape)
-                    .background(brush = page.gradient),
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(
-                    imageVector = page.icon,
-                    contentDescription = null,
-                    modifier = Modifier.size(64.dp),
-                    tint = Color.White
-                )
-            }
         }
         
         Spacer(modifier = Modifier.height(48.dp))
@@ -402,90 +366,5 @@ fun PageIndicators(
                     )
             )
         }
-    }
-}
-
-/**
- * Animated background gradient that changes with pages
- */
-@Composable
-fun AnimatedBackgroundGradient(
-    currentPage: Int,
-    isDarkTheme: Boolean
-) {
-    if (!isDarkTheme) return
-    
-    val infiniteTransition = rememberInfiniteTransition(label = "backgroundGradient")
-    
-    val rotation by infiniteTransition.animateFloat(
-        initialValue = 0f,
-        targetValue = 360f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(20000, easing = LinearEasing),
-            repeatMode = RepeatMode.Restart
-        ),
-        label = "rotation"
-    )
-    
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .alpha(0.15f)
-    ) {
-        // Gradient blob top right
-        Box(
-            modifier = Modifier
-                .size(300.dp)
-                .offset(x = 150.dp, y = (-100).dp)
-                .blur(80.dp)
-                .background(
-                    brush = Brush.radialGradient(
-                        colors = listOf(
-                            GradientDarkColors.GradientPrimaryEnd.copy(alpha = 0.6f),
-                            Color.Transparent
-                        )
-                    ),
-                    shape = CircleShape
-                )
-        )
-        
-        // Gradient blob bottom left
-        Box(
-            modifier = Modifier
-                .size(250.dp)
-                .align(Alignment.BottomStart)
-                .offset(x = (-80).dp, y = 100.dp)
-                .blur(70.dp)
-                .background(
-                    brush = Brush.radialGradient(
-                        colors = listOf(
-                            GradientDarkColors.GradientAccentEnd.copy(alpha = 0.5f),
-                            Color.Transparent
-                        )
-                    ),
-                    shape = CircleShape
-                )
-        )
-        
-        // Center gradient blob (moves with pages)
-        Box(
-            modifier = Modifier
-                .size(200.dp)
-                .align(Alignment.Center)
-                .offset(
-                    x = (currentPage * 50 - 100).dp,
-                    y = 0.dp
-                )
-                .blur(60.dp)
-                .background(
-                    brush = Brush.radialGradient(
-                        colors = listOf(
-                            GradientDarkColors.GradientSecondaryEnd.copy(alpha = 0.4f),
-                            Color.Transparent
-                        )
-                    ),
-                    shape = CircleShape
-                )
-        )
     }
 }

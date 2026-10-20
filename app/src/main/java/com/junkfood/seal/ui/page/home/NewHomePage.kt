@@ -48,14 +48,12 @@ import androidx.compose.material.icons.outlined.Replay
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.Description
 import androidx.compose.material.icons.outlined.ExitToApp
-import androidx.compose.material.icons.outlined.FileDownload
 import androidx.compose.material.icons.outlined.Folder
 import androidx.compose.material.icons.outlined.HighQuality
 import androidx.compose.material.icons.outlined.Image
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.Language
 import androidx.compose.material.icons.outlined.Link
-import androidx.compose.material.icons.outlined.Menu
 import androidx.compose.material.icons.outlined.MoreVert
 import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material.icons.outlined.Pause
@@ -194,8 +192,6 @@ import org.koin.compose.koinInject
 @Composable
 fun NewHomePage(
     modifier: Modifier = Modifier,
-    onMenuOpen: () -> Unit = {},
-    onNavigateToDownloads: () -> Unit = {},
     onNavigateToBatchUrlImport: () -> Unit = {},
     onNavigateToVideoInfoDownload: () -> Unit = {},
     onNavigateToThumbnailDownload: () -> Unit = {},
@@ -699,30 +695,12 @@ fun NewHomePage(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { 
+                title = {
                     Text(
                         text = stringResource(R.string.home),
                         style = MaterialTheme.typography.titleLarge,
                         fontWeight = FontWeight.SemiBold
                     )
-                },
-                navigationIcon = {
-                    IconButton(onClick = onMenuOpen) {
-                        Icon(
-                            imageVector = Icons.Outlined.Menu,
-                            contentDescription = "Menu",
-                            tint = MaterialTheme.colorScheme.primary
-                        )
-                    }
-                },
-                actions = {
-                    IconButton(onClick = onNavigateToDownloads) {
-                        Icon(
-                            imageVector = Icons.Outlined.FileDownload,
-                            contentDescription = stringResource(R.string.downloads_history),
-                            tint = MaterialTheme.colorScheme.primary
-                        )
-                    }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = Color.Transparent

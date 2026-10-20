@@ -41,6 +41,8 @@ import com.junkfood.seal.ui.component.PreferenceItem
 import com.junkfood.seal.ui.component.PreferenceSubtitle
 import com.junkfood.seal.ui.component.PreferenceSingleChoiceItem
 import com.junkfood.seal.ui.component.PreferenceSwitch
+import com.junkfood.seal.ui.component.SettingsGroupCard
+import com.junkfood.seal.ui.component.SettingsGroupDivider
 import com.junkfood.seal.ui.page.security.LockScreen
 import com.junkfood.seal.util.AuthenticationManager
 import com.junkfood.seal.util.ARIA2C_CONNECTIONS
@@ -139,12 +141,13 @@ fun SealPlusExtrasPage(
             item {
                 PreferenceSubtitle(text = stringResource(R.string.download_control))
             }
-            
+
             item {
-                var maxConcurrentDownloads by remember { 
-                    mutableStateOf(MAX_CONCURRENT_DOWNLOADS.getInt()) 
+              SettingsGroupCard {
+                var maxConcurrentDownloads by remember {
+                    mutableStateOf(MAX_CONCURRENT_DOWNLOADS.getInt())
                 }
-                
+
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -208,9 +211,7 @@ fun SealPlusExtrasPage(
                         )
                     }
                 }
-            }
-            
-            item {
+                SettingsGroupDivider()
                 val aria2cConnectionOptions = listOf(2, 4, 8, 16, 32)
                 var aria2cConnections by remember {
                     mutableStateOf(ARIA2C_CONNECTIONS.getInt().let { saved ->
@@ -279,6 +280,7 @@ fun SealPlusExtrasPage(
                         )
                     }
                 }
+              }
             }
 
             item {
@@ -286,6 +288,7 @@ fun SealPlusExtrasPage(
             }
 
             item {
+              SettingsGroupCard {
                 PreferenceSwitch(
                     title = stringResource(R.string.format_list_view_title),
                     description = stringResource(R.string.format_list_view_desc),
@@ -296,13 +299,15 @@ fun SealPlusExtrasPage(
                         formatListView = !formatListView
                     }
                 )
+              }
             }
 
             item {
                 PreferenceSubtitle(text = stringResource(R.string.security_and_privacy))
             }
-            
+
             item {
+              SettingsGroupCard {
                 PreferenceItem(
                     title = stringResource(R.string.app_lock),
                     description = stringResource(R.string.lock_app_with_pin_biometric),
@@ -318,9 +323,7 @@ fun SealPlusExtrasPage(
                         }
                     }
                 )
-            }
-
-            item {
+                SettingsGroupDivider()
                 PreferenceItem(
                     title = stringResource(R.string.hidden_content),
                     description = stringResource(R.string.hidden_content_desc),
@@ -336,9 +339,7 @@ fun SealPlusExtrasPage(
                         }
                     }
                 )
-            }
-            
-            item {
+                SettingsGroupDivider()
                 PreferenceItem(
                     title = stringResource(R.string.network_type_restriction),
                     description = when (networkTypeRestriction) {
@@ -353,9 +354,7 @@ fun SealPlusExtrasPage(
                     },
                     onClick = { showNetworkDialog = true }
                 )
-            }
-
-            item {
+                SettingsGroupDivider()
                 Column(
                     modifier =
                         Modifier
@@ -420,79 +419,74 @@ fun SealPlusExtrasPage(
                         )
                     }
                 }
+              }
             }
-            
+
             item {
                 PreferenceSubtitle(text = stringResource(R.string.notification_settings))
             }
-            
+
             item {
+              SettingsGroupCard {
                 PreferenceSwitch(
                     title = stringResource(R.string.notification_sound_settings),
                     description = stringResource(R.string.notification_sound_desc),
                     icon = Icons.Outlined.Notifications,
                     isChecked = notificationSound,
-                    onClick = { 
+                    onClick = {
                         NOTIFICATION_SOUND.updateBoolean(!notificationSound)
                         notificationSound = !notificationSound
                     }
                 )
-            }
-            
-            item {
+                SettingsGroupDivider()
                 PreferenceSwitch(
                     title = stringResource(R.string.notification_vibrate_settings),
                     description = stringResource(R.string.notification_vibrate_desc),
                     icon = Icons.Outlined.Notifications,
                     isChecked = notificationVibrate,
                     enabled = notificationSound,
-                    onClick = { 
+                    onClick = {
                         NOTIFICATION_VIBRATE.updateBoolean(!notificationVibrate)
                         notificationVibrate = !notificationVibrate
                     }
                 )
-            }
-            
-            item {
+                SettingsGroupDivider()
                 PreferenceSwitch(
                     title = stringResource(R.string.notification_led_settings),
                     description = stringResource(R.string.notification_led_desc),
                     icon = Icons.Outlined.Notifications,
                     isChecked = notificationLed,
                     enabled = notificationSound,
-                    onClick = { 
+                    onClick = {
                         NOTIFICATION_LED.updateBoolean(!notificationLed)
                         notificationLed = !notificationLed
                     }
                 )
-            }
-            
-            item {
+                SettingsGroupDivider()
                 PreferenceSwitch(
                     title = stringResource(R.string.notification_success_sound_settings),
                     description = stringResource(R.string.notification_success_sound_desc),
                     icon = Icons.Outlined.Notifications,
                     isChecked = notificationSuccessSound,
                     enabled = notificationSound,
-                    onClick = { 
+                    onClick = {
                         NOTIFICATION_SUCCESS_SOUND.updateBoolean(!notificationSuccessSound)
                         notificationSuccessSound = !notificationSuccessSound
                     }
                 )
-            }
-            
-            item {
+                SettingsGroupDivider()
                 PreferenceSwitch(
                     title = stringResource(R.string.notification_error_sound_settings),
                     description = stringResource(R.string.notification_error_sound_desc),
                     icon = Icons.Outlined.Notifications,
                     isChecked = notificationErrorSound,
                     enabled = notificationSound,
-                    onClick = { 
+                    onClick = {
                         NOTIFICATION_ERROR_SOUND.updateBoolean(!notificationErrorSound)
                         notificationErrorSound = !notificationErrorSound
                     }
                 )
+              }
             }
 
         }
