@@ -195,7 +195,7 @@ fun MoreToolsPage(
                 start = 16.dp,
                 end = 16.dp,
                 top = paddingValues.calculateTopPadding() + 4.dp,
-                bottom = paddingValues.calculateBottomPadding() + 24.dp,
+                bottom = paddingValues.calculateBottomPadding() + 100.dp,
             ),
             horizontalArrangement = Arrangement.spacedBy(12.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp),

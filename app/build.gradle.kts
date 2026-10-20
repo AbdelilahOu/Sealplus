@@ -161,6 +161,8 @@ dependencies {
     implementation(libs.coil.kt.compose)
     implementation(libs.coil.kt.network.okhttp)
 
+    implementation(libs.haze)
+
     implementation(libs.kotlinx.serialization.json)
 
     implementation(libs.koin.android)

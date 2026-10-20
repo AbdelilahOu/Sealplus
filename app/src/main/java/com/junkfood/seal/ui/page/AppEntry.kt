@@ -1,19 +1,22 @@
 package com.junkfood.seal.ui.page
 
 import android.webkit.CookieManager
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
+import androidx.compose.ui.Alignment
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
+import dev.chrisbanes.haze.HazeState
+import dev.chrisbanes.haze.hazeSource
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraphBuilder
@@ -110,26 +113,11 @@ fun AppEntry(dialogViewModel: DownloadDialogViewModel) {
         }
     }
 
-    Scaffold(
-        modifier = Modifier.fillMaxSize(),
-        bottomBar = {
-            if (currentRoute != Route.ONBOARDING) {
-                BottomNavBar(
-                    currentRoute = currentTopDestination,
-                    onNavigate = {
-                        if (currentRoute != it) {
-                            navController.navigate(it) {
-                                launchSingleTop = true
-                                popUpTo(route = Route.HOME)
-                            }
-                        }
-                    },
-                )
-            }
-        },
-    ) { padding ->
+    val hazeState = remember { HazeState() }
+
+    Box(modifier = Modifier.fillMaxSize()) {
         NavHost(
-            modifier = Modifier.padding(padding),
+            modifier = Modifier.fillMaxSize().hazeSource(hazeState),
             navController = navController,
             startDestination = Route.HOME,
         ) {
@@ -256,6 +244,22 @@ fun AppEntry(dialogViewModel: DownloadDialogViewModel) {
                     },
                     cookiesViewModel = cookiesViewModel,
                 )
+        }
+
+        if (currentRoute != Route.ONBOARDING) {
+            BottomNavBar(
+                currentRoute = currentTopDestination,
+                hazeState = hazeState,
+                onNavigate = {
+                    if (currentRoute != it) {
+                        navController.navigate(it) {
+                            launchSingleTop = true
+                            popUpTo(route = Route.HOME)
+                        }
+                    }
+                },
+                modifier = Modifier.align(Alignment.BottomCenter),
+            )
         }
 
         AppUpdater()
