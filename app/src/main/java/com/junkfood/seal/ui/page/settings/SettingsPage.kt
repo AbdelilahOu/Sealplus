@@ -97,8 +97,6 @@ fun SettingsPage(onNavigateBack: () -> Unit, onNavigateTo: (String) -> Unit) {
         }
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
 
-    val typography = MaterialTheme.typography
-
     @Composable
     fun trailingChevron() {
         Icon(
@@ -111,17 +109,11 @@ fun SettingsPage(onNavigateBack: () -> Unit, onNavigateTo: (String) -> Unit) {
     Scaffold(
         modifier = Modifier.fillMaxSize().nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
-            val overrideTypography =
-                remember(typography) { typography.copy(headlineMedium = typography.displaySmall) }
-
-            MaterialTheme(typography = overrideTypography) {
-                LargeTopAppBar(
-                    title = { Text(text = stringResource(id = R.string.settings)) },
-                    navigationIcon = { BackButton(onNavigateBack) },
-                    scrollBehavior = scrollBehavior,
-                    expandedHeight = TopAppBarDefaults.LargeAppBarExpandedHeight + 24.dp,
-                )
-            }
+            LargeTopAppBar(
+                title = { Text(text = stringResource(id = R.string.settings)) },
+                navigationIcon = { BackButton(onNavigateBack) },
+                scrollBehavior = scrollBehavior,
+            )
         },
     ) {
         LazyColumn(

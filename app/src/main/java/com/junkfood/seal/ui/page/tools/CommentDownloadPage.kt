@@ -617,7 +617,7 @@ private fun CommentResultCard(
         color = palette.surface,
         border = BorderStroke(1.dp, palette.chipSelectedBorder.copy(alpha = 0.4f)),
     ) {
-        Column(modifier = Modifier.padding(14.dp)) {
+        Column(modifier = Modifier.padding(10.dp)) {
             Row {
                 if (!thumbnailUrl.isNullOrBlank()) {
                     AsyncImageImpl(

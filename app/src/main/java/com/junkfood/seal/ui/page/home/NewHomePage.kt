@@ -1147,44 +1147,6 @@ fun URLInputField(
     val isGradientDark = LocalGradientDarkMode.current
     val fullPlaceholder = stringResource(R.string.enter_url_to_download)
 
-    // Typewriter animation: reveal characters one by one
-    var displayedLength by remember { mutableStateOf(0) }
-    
-    LaunchedEffect(Unit) {
-        displayedLength = 0
-        for (i in 1..fullPlaceholder.length) {
-            delay(50L)
-            displayedLength = i
-        }
-    }
-
-    // Gradient animation for the placeholder text
-    val infiniteTransition = rememberInfiniteTransition(label = "placeholderGradient")
-    val gradientShift by infiniteTransition.animateFloat(
-        initialValue = 0f,
-        targetValue = 1000f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(durationMillis = 3000, easing = LinearEasing),
-            repeatMode = RepeatMode.Restart
-        ),
-        label = "placeholderShift"
-    )
-
-    val gradientColors = listOf(
-        MaterialTheme.colorScheme.primary,
-        MaterialTheme.colorScheme.tertiary,
-        MaterialTheme.colorScheme.secondary,
-        MaterialTheme.colorScheme.tertiary,
-        MaterialTheme.colorScheme.primary,
-    )
-
-    val gradientBrush = Brush.linearGradient(
-        colors = gradientColors,
-        start = Offset(gradientShift, 0f),
-        end = Offset(gradientShift + 400f, 0f),
-        tileMode = TileMode.Mirror
-    )
-    
     OutlinedTextField(
         value = value,
         onValueChange = onValueChange,
@@ -1193,14 +1155,13 @@ fun URLInputField(
             .height(64.dp),
         placeholder = {
             Text(
-                text = fullPlaceholder.take(displayedLength),
-                style = MaterialTheme.typography.bodyLarge.merge(
-                    TextStyle(brush = gradientBrush)
-                )
+                text = fullPlaceholder,
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
         },
         singleLine = true,
-        shape = RoundedCornerShape(32.dp),
+        shape = RoundedCornerShape(16.dp),
         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
         keyboardActions = KeyboardActions(onDone = { onDownloadClick() }),
         trailingIcon = {
@@ -1240,12 +1201,10 @@ fun URLInputField(
             }
         },
         colors = OutlinedTextFieldDefaults.colors(
-            focusedBorderColor = if (isGradientDark && isDarkTheme) {
-                GradientDarkColors.GradientPrimaryStart
-            } else {
-                MaterialTheme.colorScheme.primary
-            },
-            unfocusedBorderColor = MaterialTheme.colorScheme.outline
+            focusedBorderColor = Color.Transparent,
+            unfocusedBorderColor = Color.Transparent,
+            focusedContainerColor = MaterialTheme.colorScheme.surfaceContainer,
+            unfocusedContainerColor = MaterialTheme.colorScheme.surfaceContainer,
         )
     )
 }

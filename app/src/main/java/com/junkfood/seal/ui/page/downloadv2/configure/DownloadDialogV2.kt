@@ -1030,7 +1030,7 @@ private fun SingleChoiceItem(
         interactionSource = interactionSource,
         modifier = modifier
             .fillMaxWidth()
-            .padding(vertical = 4.dp)
+            .padding(vertical = 2.dp)
             .graphicsLayer {
                 scaleX = scale
                 scaleY = scale
@@ -1039,29 +1039,28 @@ private fun SingleChoiceItem(
         enabled = enabled,
     ) {
         Row(
-            modifier = Modifier.padding(horizontal = 18.dp, vertical = 16.dp),
+            modifier = Modifier.padding(horizontal = 12.dp, vertical = 10.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Box(
                 modifier = Modifier
-                    .size(42.dp)
+                    .size(32.dp)
                     .background(color = iconContainerColor, shape = CircleShape),
                 contentAlignment = Alignment.Center
             ) {
                 CompositionLocalProvider(LocalContentColor provides iconTintColor) { icon?.invoke() }
             }
-            Spacer(modifier = Modifier.width(14.dp))
+            Spacer(modifier = Modifier.width(10.dp))
             Column(modifier = Modifier.weight(1f)) {
                 Text(
                     text = title,
-                    style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold)
+                    style = MaterialTheme.typography.titleSmall.copy(fontWeight = FontWeight.SemiBold)
                 )
-                Spacer(modifier = Modifier.height(2.dp))
                 Text(
                     text = desc,
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    maxLines = 2,
+                    maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                 )
             }
@@ -1076,14 +1075,14 @@ private fun SingleChoiceItem(
                 if (isSelected) {
                     Box(
                         modifier =
-                            Modifier.size(24.dp)
+                            Modifier.size(20.dp)
                                 .background(MaterialTheme.colorScheme.primary, CircleShape),
                         contentAlignment = Alignment.Center,
                     ) {
                         Icon(
                             imageVector = Icons.Outlined.Check,
                             contentDescription = null,
-                            modifier = Modifier.size(15.dp),
+                            modifier = Modifier.size(13.dp),
                             tint = MaterialTheme.colorScheme.onPrimary,
                         )
                     }
@@ -1170,7 +1169,7 @@ internal fun Header(
 @Composable
 private fun SectionLabel(modifier: Modifier = Modifier, text: String) {
     Row(
-        modifier = modifier.padding(top = 20.dp, bottom = 10.dp),
+        modifier = modifier.padding(top = 12.dp, bottom = 6.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Box(
@@ -1263,16 +1262,16 @@ private fun DownloadTypeCard(
         interactionSource = interactionSource,
     ) {
         Column(
-            modifier = Modifier.fillMaxWidth().padding(vertical = 14.dp),
+            modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Icon(
                 imageVector = type.icon,
                 contentDescription = null,
                 tint = contentColor,
-                modifier = Modifier.size(22.dp),
+                modifier = Modifier.size(20.dp),
             )
-            Spacer(Modifier.height(6.dp))
+            Spacer(Modifier.height(4.dp))
             Text(
                 text = type.label(),
                 style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.SemiBold),

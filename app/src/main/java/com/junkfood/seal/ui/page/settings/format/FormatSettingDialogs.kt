@@ -3,6 +3,7 @@ package com.junkfood.seal.ui.page.settings.format
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.SizeTransform
 import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -34,14 +35,13 @@ import androidx.compose.material3.ElevatedAssistChip
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MenuAnchorType
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.ProvideTextStyle
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.VerticalDivider
@@ -824,75 +824,71 @@ fun SubtitleLanguageDialog(onDismissRequest: () -> Unit) {
     SubtitleLanguageDialogImpl(
         onDismissRequest = onDismissRequest,
         initialLanguages = languages,
-        onReset = {
-            SUBTITLE_LANGUAGE.let {
-                languages = it.getStringDefault()
-                it.updateString(languages)
-            }
-        },
         onConfirm = { SUBTITLE_LANGUAGE.updateString(it) },
     )
 }
+
+private const val PATTERN_ENGLISH = "en.*"
+private const val PATTERN_GERMAN = "de.*"
+private const val PATTERN_ORIGINAL = ".*-orig"
+
+private fun String.hasPattern(pattern: String): Boolean =
+    split(",").map { it.trim() }.contains(pattern)
+
+private fun buildLanguagePreference(english: Boolean, german: Boolean, original: Boolean): String =
+    listOfNotNull(
+        PATTERN_ENGLISH.takeIf { english },
+        PATTERN_GERMAN.takeIf { german },
+        PATTERN_ORIGINAL.takeIf { original },
+    ).joinToString(",")
 
 @Composable
 @Preview
 private fun SubtitleLanguageDialogImpl(
     onDismissRequest: () -> Unit = {},
-    initialLanguages: String = "en.*,.*-orig",
-    onReset: () -> Unit = {},
+    initialLanguages: String = "en.*,de.*,.*-orig",
     onConfirm: (String) -> Unit = {},
 ) {
-    var languages by remember(initialLanguages) { mutableStateOf(initialLanguages) }
-    val uriHandler = LocalUriHandler.current
+    var english by remember(initialLanguages) { mutableStateOf(initialLanguages.hasPattern(PATTERN_ENGLISH)) }
+    var german by remember(initialLanguages) { mutableStateOf(initialLanguages.hasPattern(PATTERN_GERMAN)) }
+    var original by remember(initialLanguages) { mutableStateOf(initialLanguages.hasPattern(PATTERN_ORIGINAL)) }
+
     SealDialog(
         onDismissRequest = onDismissRequest,
         title = { Text(stringResource(id = R.string.subtitle_language)) },
         icon = { Icon(Icons.Outlined.Language, null, tint = MaterialTheme.colorScheme.primary) },
         text = {
-            Column() {
+            Column {
                 Text(
                     text = stringResource(id = R.string.subtitle_language_desc),
                     modifier = Modifier.padding(horizontal = 24.dp),
                 )
                 Spacer(modifier = Modifier.height(16.dp))
-                ProvideTextStyle(
-                    value = LocalTextStyle.current.merge(fontFamily = FontFamily.Monospace)
-                ) {
-                    OutlinedTextField(
-                        modifier = Modifier.fillMaxWidth().padding(horizontal = 24.dp),
-                        value = languages,
-                        onValueChange = { languages = it },
-                        label = { Text(stringResource(id = R.string.subtitle_language)) },
-                        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-                    )
-                }
-                Spacer(modifier = Modifier.height(8.dp))
-
                 Row(
-                    modifier =
-                        Modifier.padding(horizontal = 16.dp)
-                            .horizontalScroll(rememberScrollState())
-                            .padding(horizontal = 8.dp)
+                    modifier = Modifier.padding(horizontal = 24.dp),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
                 ) {
-                    OutlinedButtonChip(
-                        modifier = Modifier.padding(end = 8.dp),
-                        label = stringResource(id = R.string.reset),
-                        icon = Icons.Outlined.Sync,
-                    ) {
-                        onReset()
-                    }
-                    OutlinedButtonChip(
-                        label = stringResource(R.string.yt_dlp_docs),
-                        icon = Icons.AutoMirrored.Outlined.OpenInNew,
-                    ) {
-                        uriHandler.openUri(sortingFormats)
-                    }
+                    FilterChip(
+                        selected = english,
+                        onClick = { english = !english },
+                        label = { Text(stringResource(id = R.string.language_english)) },
+                    )
+                    FilterChip(
+                        selected = german,
+                        onClick = { german = !german },
+                        label = { Text(stringResource(id = R.string.language_german)) },
+                    )
+                    FilterChip(
+                        selected = original,
+                        onClick = { original = !original },
+                        label = { Text(stringResource(id = R.string.language_original)) },
+                    )
                 }
             }
         },
         confirmButton = {
             ConfirmButton() {
-                onConfirm(languages)
+                onConfirm(buildLanguagePreference(english = english, german = german, original = original))
                 onDismissRequest()
             }
         },

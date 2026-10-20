@@ -622,7 +622,6 @@ private fun FormatPageImpl(
     val videoDurationRange = 0f..(videoInfo.duration?.toFloat() ?: 0f)
     var showVideoClipDialog by remember { mutableStateOf(false) }
     var showRenameDialog by remember { mutableStateOf(false) }
-    var showSubtitleSelectionDialog by remember { mutableStateOf(false) }
 
     var videoClipDuration by remember { mutableStateOf(videoDurationRange) }
     var videoTitle by remember { mutableStateOf("") }
@@ -1059,18 +1058,6 @@ private fun FormatPageImpl(
                                 style = MaterialTheme.typography.titleMedium,
                                 modifier = Modifier.weight(1f),
                             )
-
-                            ClickableTextAction(
-                                visible = true,
-                                text =
-                                    stringResource(
-                                        id =
-                                            androidx.appcompat.R.string
-                                                .abc_activity_chooser_view_see_all
-                                    ),
-                            ) {
-                                showSubtitleSelectionDialog = true
-                            }
                         }
 
                         LazyRow(
@@ -1397,21 +1384,6 @@ private fun FormatPageImpl(
         ) {
             videoTitle = it
         }
-    if (showSubtitleSelectionDialog)
-        SubtitleSelectionDialog(
-            suggestedSubtitles = suggestedSubtitleMap,
-            autoCaptions = otherSubtitleMap,
-            selectedSubtitles = selectedSubtitles,
-            onDismissRequest = { showSubtitleSelectionDialog = false },
-            onConfirm = { subs, autoSubs ->
-                selectedSubtitles.run {
-                    clear()
-                    addAll(subs)
-                }
-
-                showSubtitleSelectionDialog = false
-            },
-        )
 }
 
 @Composable

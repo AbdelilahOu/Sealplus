@@ -71,7 +71,7 @@ fun BottomNavBar(currentRoute: String?, onNavigate: (String) -> Unit, modifier: 
             shadowElevation = 6.dp,
         ) {
             Row(
-                modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp, vertical = 10.dp),
+                modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp, vertical = 8.dp),
                 horizontalArrangement = androidx.compose.foundation.layout.Arrangement.SpaceEvenly,
             ) {
                 destinations.forEach { destination ->
@@ -97,13 +97,13 @@ private fun NavItem(
 ) {
     Row(
         modifier =
-            Modifier.clip(RoundedCornerShape(20.dp))
+            Modifier.clip(RoundedCornerShape(24.dp))
                 .background(
                     if (selected) MaterialTheme.colorScheme.surfaceContainerHigh
                     else androidx.compose.ui.graphics.Color.Transparent
                 )
                 .clickable(onClick = onClick)
-                .padding(horizontal = 16.dp, vertical = 8.dp),
+                .padding(horizontal = 12.dp, vertical = 8.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Icon(
