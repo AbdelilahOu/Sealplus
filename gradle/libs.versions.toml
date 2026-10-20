@@ -40,7 +40,7 @@ koin = "4.2.1"
 
 ktfmt = "0.26.0"
 
-haze = "2.0.1"
+haze = "1.7.2"
 
 [libraries]
 
