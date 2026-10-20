@@ -31,7 +31,6 @@ import androidx.compose.material.icons.outlined.Subscriptions
 import androidx.compose.material.icons.outlined.Terminal
 import androidx.compose.material.icons.outlined.VisibilityOff
 import androidx.compose.material.icons.outlined.Build
-import androidx.compose.material.icons.outlined.VolunteerActivism
 import androidx.compose.material.icons.rounded.BugReport
 import androidx.compose.material.icons.rounded.Info
 import androidx.compose.material3.DrawerState
@@ -441,18 +440,6 @@ fun NavigationDrawerSheetContent(
                         scope.launch {
                             onDismissRequest()
                             onNavigateToRoute(Route.TROUBLESHOOTING)
-                        }
-                    },
-                    selected = false,
-                    modifier = Modifier.padding(vertical = 2.dp)
-                )
-                NavigationDrawerItem(
-                    label = { Text(stringResource(R.string.sponsor)) },
-                    icon = { Icon(Icons.Outlined.VolunteerActivism, null, tint = ThemedIconColors.tertiary) },
-                    onClick = {
-                        scope.launch {
-                            onDismissRequest()
-                            onNavigateToRoute(Route.DONATE)
                         }
                     },
                     selected = false,

@@ -286,7 +286,7 @@ private val IntPreferenceDefaults =
         TEMPLATE_ID to 0,
         CONCURRENT to 8,
         LANGUAGE to SYSTEM_DEFAULT,
-        PALETTE_STYLE to 0,
+        PALETTE_STYLE to STYLE_MONOCHROME,
         DARK_THEME_VALUE to DarkThemePreference.ON,
         WELCOME_DIALOG to 1,
         AUDIO_CONVERSION_FORMAT to NOT_SPECIFIED,
@@ -487,7 +487,7 @@ object PreferenceUtil {
         val darkTheme: DarkThemePreference = DarkThemePreference(),
         val isDynamicColorEnabled: Boolean = false,
         val seedColor: Int = DEFAULT_SEED_COLOR,
-        val paletteStyleIndex: Int = 0,
+        val paletteStyleIndex: Int = STYLE_MONOCHROME,
         val isGradientDarkModeEnabled: Boolean = false,
     )
 
@@ -504,7 +504,7 @@ object PreferenceUtil {
                 isDynamicColorEnabled =
                     kv.decodeBool(DYNAMIC_COLOR, DynamicColors.isDynamicColorAvailable()),
                 seedColor = kv.decodeInt(THEME_COLOR, DEFAULT_SEED_COLOR),
-                paletteStyleIndex = kv.decodeInt(PALETTE_STYLE, 0),
+                paletteStyleIndex = kv.decodeInt(PALETTE_STYLE, STYLE_MONOCHROME),
                 isGradientDarkModeEnabled = kv.decodeBool(GRADIENT_DARK_MODE, true),
             )
         )

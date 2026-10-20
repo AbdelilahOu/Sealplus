@@ -16,7 +16,7 @@ object ToolColors {
     val Background = Color(0xFF09090B)
     val Surface = Color(0xFF14141A)
     val SurfaceVariant = Color(0xFF1E1E28)
-    val Primary = Color(0xFF7C4DFF)
+    val Primary = Color(0xFFE0E0E0)
     val Border = Color(0xFF2A2A35)
     val TextPrimary = Color(0xFFFFFFFF)
     val TextSecondary = Color(0xFF9E9EAB)
@@ -26,7 +26,7 @@ object ToolColors {
 }
 
 val ToolGradientBrush: Brush = Brush.horizontalGradient(
-    colors = listOf(Color(0xFF7C4DFF), Color(0xFF9C6DFF)),
+    colors = listOf(Color(0xFFE0E0E0), Color(0xFFFFFFFF)),
 )
 
 /**

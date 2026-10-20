@@ -22,7 +22,6 @@ import androidx.compose.material.icons.outlined.NewReleases
 import androidx.compose.material.icons.outlined.Public
 import androidx.compose.material.icons.outlined.Update
 import androidx.compose.material.icons.outlined.UpdateDisabled
-import androidx.compose.material.icons.outlined.VolunteerActivism
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -85,7 +84,6 @@ fun AboutPage(
     onNavigateBack: () -> Unit,
     onNavigateToCreditsPage: () -> Unit,
     onNavigateToUpdatePage: () -> Unit,
-    onNavigateToDonatePage: () -> Unit,
     onNavigateToOnboarding: () -> Unit = {},
 ) {
     val scrollBehavior =
@@ -219,13 +217,6 @@ fun AboutPage(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.spacedBy(12.dp),
                         ) {
-                            CommunityCard(
-                                title = stringResource(R.string.sponsor),
-                                description = stringResource(R.string.sponsor_desc),
-                                icon = Icons.Outlined.VolunteerActivism,
-                                onClick = onNavigateToDonatePage,
-                                modifier = Modifier.weight(1f),
-                            )
                             CommunityCard(
                                 title = stringResource(R.string.telegram_channel),
                                 description = telegramChannelUrl,

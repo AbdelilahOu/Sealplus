@@ -65,15 +65,15 @@ fun SealTheme(
                 // Gradient Dark mode overrides all other themes
                 isGradientDarkEnabled && darkTheme -> copy(
                     primary = GradientDarkColors.GradientPrimaryEnd,
-                    onPrimary = GradientDarkColors.OnPrimary,
+                    onPrimary = GradientDarkColors.OnAccentDark,
                     primaryContainer = GradientDarkColors.GradientPrimaryStart,
                     onPrimaryContainer = GradientDarkColors.OnPrimary,
                     secondary = GradientDarkColors.GradientSecondaryEnd,
-                    onSecondary = GradientDarkColors.OnPrimary,
+                    onSecondary = GradientDarkColors.OnAccentDark,
                     secondaryContainer = GradientDarkColors.GradientSecondaryStart,
                     onSecondaryContainer = GradientDarkColors.OnPrimary,
                     tertiary = GradientDarkColors.GradientAccentEnd,
-                    onTertiary = GradientDarkColors.OnPrimary,
+                    onTertiary = GradientDarkColors.OnAccentDark,
                     tertiaryContainer = GradientDarkColors.GradientAccentStart,
                     onTertiaryContainer = GradientDarkColors.OnPrimary,
                     background = GradientDarkColors.Background,
