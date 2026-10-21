@@ -79,6 +79,7 @@ import com.junkfood.seal.ui.common.ThemedIconColors
 import com.junkfood.seal.ui.component.BackButton
 import com.junkfood.seal.ui.component.ConfirmButton
 import com.junkfood.seal.ui.component.SealDialog
+import com.junkfood.seal.ui.page.home.LocalBottomNavBarInset
 import com.junkfood.seal.ui.theme.GradientBrushes
 import com.junkfood.seal.ui.theme.GradientDarkColors
 import com.junkfood.seal.util.makeToast
@@ -195,7 +196,7 @@ fun MoreToolsPage(
                 start = 16.dp,
                 end = 16.dp,
                 top = paddingValues.calculateTopPadding() + 4.dp,
-                bottom = paddingValues.calculateBottomPadding() + 100.dp,
+                bottom = paddingValues.calculateBottomPadding() + LocalBottomNavBarInset.current + 24.dp,
             ),
             horizontalArrangement = Arrangement.spacedBy(12.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp),

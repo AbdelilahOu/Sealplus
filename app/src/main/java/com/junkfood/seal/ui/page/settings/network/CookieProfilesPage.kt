@@ -8,6 +8,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -103,6 +104,7 @@ import com.junkfood.seal.ui.component.PreferenceItemVariant
 import com.junkfood.seal.ui.component.PreferenceSwitchWithContainer
 import com.junkfood.seal.ui.component.SealDialog
 import com.junkfood.seal.ui.component.TextButtonWithIcon
+import com.junkfood.seal.ui.page.home.LocalBottomNavBarInset
 import com.junkfood.seal.ui.theme.SealTheme
 import com.junkfood.seal.ui.theme.generateLabelColor
 import com.junkfood.seal.util.COOKIES
@@ -280,7 +282,14 @@ fun CookieProfilePage(
             )
         },
     ) { paddingValues ->
-        LazyColumn(modifier = Modifier, contentPadding = paddingValues) {
+        LazyColumn(
+            modifier = Modifier,
+            contentPadding =
+                PaddingValues(
+                    top = paddingValues.calculateTopPadding(),
+                    bottom = paddingValues.calculateBottomPadding() + LocalBottomNavBarInset.current,
+                ),
+        ) {
             item {
                 PreferenceSwitchWithContainer(
                     title = stringResource(R.string.use_cookies),

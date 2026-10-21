@@ -74,6 +74,7 @@ import com.junkfood.seal.ui.component.PasteFromClipBoardButton
 import com.junkfood.seal.ui.component.SealDialog
 import com.junkfood.seal.ui.component.SealModalBottomSheetM2
 import com.junkfood.seal.ui.component.TaskStatus
+import com.junkfood.seal.ui.page.home.LocalBottomNavBarInset
 import com.junkfood.seal.ui.page.settings.command.CommandTemplateDialog
 import com.junkfood.seal.util.PreferenceUtil
 import com.junkfood.seal.util.PreferenceUtil.updateInt
@@ -120,7 +121,11 @@ fun TaskListPage(onNavigateBack: () -> Unit, onNavigateToDetail: (Int) -> Unit) 
                         sheetState.show()
                     }
                 },
-                modifier = Modifier.padding(vertical = 18.dp, horizontal = 6.dp),
+                modifier =
+                    Modifier.padding(
+                        vertical = 18.dp,
+                        horizontal = 6.dp,
+                    ).padding(bottom = LocalBottomNavBarInset.current),
             ) {
                 Icon(Icons.Outlined.Add, stringResource(id = R.string.new_task))
             }
@@ -129,7 +134,13 @@ fun TaskListPage(onNavigateBack: () -> Unit, onNavigateToDetail: (Int) -> Unit) 
         val clipboardManager = LocalClipboardManager.current
         LazyColumn(
             modifier = Modifier.padding(paddings),
-            contentPadding = PaddingValues(24.dp),
+            contentPadding =
+                PaddingValues(
+                    start = 24.dp,
+                    end = 24.dp,
+                    top = 24.dp,
+                    bottom = 24.dp + LocalBottomNavBarInset.current,
+                ),
             verticalArrangement = Arrangement.spacedBy(12.dp),
         ) {
             items(

@@ -4,15 +4,19 @@ import android.webkit.CookieManager
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.ui.Alignment
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import dev.chrisbanes.haze.HazeState
@@ -70,6 +74,8 @@ import com.junkfood.seal.ui.page.tools.CommentDownloadPage
 import com.junkfood.seal.ui.page.tools.ThumbnailDownloadPage
 import com.junkfood.seal.ui.page.tools.VideoInfoDetailPage
 import com.junkfood.seal.ui.page.home.BottomNavBar
+import com.junkfood.seal.ui.page.home.LocalBottomNavBarInset
+import com.junkfood.seal.ui.page.home.LocalIsFormatSelectionActive
 import com.junkfood.seal.ui.page.tools.VideoInfoDownloadPage
 import org.koin.androidx.compose.koinViewModel
 
@@ -85,6 +91,7 @@ fun AppEntry(dialogViewModel: DownloadDialogViewModel) {
     val context = LocalContext.current
     val view = LocalView.current
     val sheetState by dialogViewModel.sheetStateFlow.collectAsStateWithLifecycle()
+    val selectionState by dialogViewModel.selectionStateFlow.collectAsStateWithLifecycle()
     val cookiesViewModel: CookiesViewModel = koinViewModel()
 
     val versionReport = App.packageInfo.versionName.toString()
@@ -115,6 +122,11 @@ fun AppEntry(dialogViewModel: DownloadDialogViewModel) {
 
     val hazeState = remember { HazeState() }
 
+    val density = LocalDensity.current
+    var bottomNavBarHeightPx by remember { mutableIntStateOf(0) }
+    val bottomNavBarInset = with(density) { bottomNavBarHeightPx.toDp() }
+
+    CompositionLocalProvider(LocalBottomNavBarInset provides bottomNavBarInset) {
     Box(modifier = Modifier.fillMaxSize()) {
         NavHost(
             modifier = Modifier.fillMaxSize().hazeSource(hazeState),
@@ -246,7 +258,8 @@ fun AppEntry(dialogViewModel: DownloadDialogViewModel) {
                 )
         }
 
-        if (currentRoute != Route.ONBOARDING) {
+        val isInFormatSelection = selectionState is DownloadDialogViewModel.SelectionState.FormatSelection
+        if (currentRoute != Route.ONBOARDING && !isInFormatSelection) {
             BottomNavBar(
                 currentRoute = currentTopDestination,
                 hazeState = hazeState,
@@ -258,12 +271,16 @@ fun AppEntry(dialogViewModel: DownloadDialogViewModel) {
                         }
                     }
                 },
-                modifier = Modifier.align(Alignment.BottomCenter),
+                modifier =
+                    Modifier.align(Alignment.BottomCenter).onSizeChanged {
+                        bottomNavBarHeightPx = it.height
+                    },
             )
         }
 
         AppUpdater()
         YtdlpUpdater()
+    }
     }
 }
 

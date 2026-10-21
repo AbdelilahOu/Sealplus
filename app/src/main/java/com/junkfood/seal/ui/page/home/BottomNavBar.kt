@@ -23,16 +23,32 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.junkfood.seal.ui.common.Route
 import dev.chrisbanes.haze.HazeState
 import dev.chrisbanes.haze.HazeTint
 import dev.chrisbanes.haze.hazeEffect
+
+/**
+ * Total space the floating [BottomNavBar] occupies at the bottom of the screen (its own height
+ * plus the margin around it), measured live in [AppEntry]. Any screen content or dialog/sheet
+ * actions that sit near the bottom of the screen should add this as extra bottom padding so they
+ * don't render underneath the bar. Defaults to 0.dp before the first measurement.
+ */
+val LocalBottomNavBarInset = staticCompositionLocalOf { 0.dp }
+
+/**
+ * Signals that the format selection page is active. When true, the nav bar is hidden
+ * and replaced with a floating download button at the bottom.
+ */
+val LocalIsFormatSelectionActive = staticCompositionLocalOf { false }
 
 private data class NavDestination(
     val route: String,
@@ -80,7 +96,7 @@ fun BottomNavBar(
     val tintColor = MaterialTheme.colorScheme.surfaceContainer
     val borderColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.08f)
 
-    Box(modifier = modifier.fillMaxWidth().padding(horizontal = 24.dp, vertical = 16.dp)) {
+    Box(modifier = modifier.fillMaxWidth(0.9f).padding(16.dp)) {
         Box(
             modifier =
                 Modifier.fillMaxWidth()
@@ -101,7 +117,7 @@ fun BottomNavBar(
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth().padding(horizontal = 8.dp, vertical = 8.dp),
-                horizontalArrangement = Arrangement.SpaceEvenly,
+                horizontalArrangement = Arrangement.SpaceBetween,
             ) {
                 destinations.forEach { destination ->
                     val selected = destination.route == currentRoute
@@ -132,7 +148,7 @@ private fun NavItem(
                     else Color.Transparent
                 )
                 .clickable(onClick = onClick)
-                .padding(horizontal = 12.dp, vertical = 8.dp),
+                .padding(horizontal = 8.dp, vertical = 8.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Icon(

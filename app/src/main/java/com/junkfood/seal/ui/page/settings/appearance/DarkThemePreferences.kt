@@ -1,6 +1,7 @@
 package com.junkfood.seal.ui.page.settings.appearance
 
 import android.os.Build
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
@@ -21,6 +22,7 @@ import com.junkfood.seal.ui.component.BackButton
 import com.junkfood.seal.ui.component.PreferenceSingleChoiceItem
 import com.junkfood.seal.ui.component.PreferenceSubtitle
 import com.junkfood.seal.ui.component.PreferenceSwitchVariant
+import com.junkfood.seal.ui.page.home.LocalBottomNavBarInset
 import com.junkfood.seal.util.DarkThemePreference.Companion.FOLLOW_SYSTEM
 import com.junkfood.seal.util.DarkThemePreference.Companion.OFF
 import com.junkfood.seal.util.DarkThemePreference.Companion.ON
@@ -48,7 +50,14 @@ fun DarkThemePreferences(onNavigateBack: () -> Unit) {
             )
         },
         content = {
-            LazyColumn(modifier = Modifier, contentPadding = it) {
+            LazyColumn(
+                modifier = Modifier,
+                contentPadding =
+                    PaddingValues(
+                        top = it.calculateTopPadding(),
+                        bottom = it.calculateBottomPadding() + LocalBottomNavBarInset.current,
+                    ),
+            ) {
                 if (Build.VERSION.SDK_INT >= 29)
                     item {
                         PreferenceSingleChoiceItem(

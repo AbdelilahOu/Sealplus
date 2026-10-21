@@ -1,5 +1,6 @@
 package com.junkfood.seal.ui.page.settings.format
 
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
@@ -44,6 +45,7 @@ import com.junkfood.seal.ui.component.PreferenceItem
 import com.junkfood.seal.ui.component.PreferenceSubtitle
 import com.junkfood.seal.ui.component.PreferenceSwitch
 import com.junkfood.seal.ui.component.PreferenceSwitchWithDivider
+import com.junkfood.seal.ui.page.home.LocalBottomNavBarInset
 import com.junkfood.seal.util.AUDIO_CONVERSION_FORMAT
 import com.junkfood.seal.util.AUDIO_CONVERT
 import com.junkfood.seal.util.CROP_ARTWORK
@@ -121,7 +123,13 @@ fun DownloadFormatPreferences(onNavigateBack: () -> Unit, navigateToSubtitlePage
         },
         content = {
             val isCustomCommandEnabled by remember { mutableStateOf(CUSTOM_COMMAND.getBoolean()) }
-            LazyColumn(contentPadding = it) {
+            LazyColumn(
+                contentPadding =
+                    PaddingValues(
+                        top = it.calculateTopPadding(),
+                        bottom = it.calculateBottomPadding() + LocalBottomNavBarInset.current,
+                    )
+            ) {
                 if (isCustomCommandEnabled)
                     item {
                         PreferenceInfo(

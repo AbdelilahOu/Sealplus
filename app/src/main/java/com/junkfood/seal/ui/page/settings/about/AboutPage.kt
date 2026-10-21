@@ -63,6 +63,7 @@ import com.junkfood.seal.App.Companion.packageInfo
 import com.junkfood.seal.R
 import com.junkfood.seal.ui.component.BackButton
 import com.junkfood.seal.ui.component.ConfirmButton
+import com.junkfood.seal.ui.page.home.LocalBottomNavBarInset
 import com.junkfood.seal.util.AUTO_UPDATE
 import com.junkfood.seal.util.PreferenceUtil
 
@@ -105,7 +106,13 @@ fun AboutPage(
         content = {
             LazyColumn(
                 modifier = Modifier.fillMaxSize().padding(it),
-                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
+                contentPadding =
+                    PaddingValues(
+                        start = 16.dp,
+                        end = 16.dp,
+                        top = 8.dp,
+                        bottom = 8.dp + LocalBottomNavBarInset.current,
+                    ),
                 verticalArrangement = Arrangement.spacedBy(12.dp),
             ) {
                 item {

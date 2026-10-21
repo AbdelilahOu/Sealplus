@@ -63,6 +63,7 @@ import com.junkfood.seal.ui.component.BackButton
 import com.junkfood.seal.ui.component.PreferenceItem
 import com.junkfood.seal.ui.component.PreferenceSwitch
 import com.junkfood.seal.ui.component.PreferenceSwitchWithDivider
+import com.junkfood.seal.ui.page.home.LocalBottomNavBarInset
 import com.junkfood.seal.ui.page.downloadv2.ActionButton
 import com.junkfood.seal.ui.page.downloadv2.CardStateIndicator
 import com.junkfood.seal.ui.page.downloadv2.VideoCardV2
@@ -115,7 +116,11 @@ fun AppearancePreferences(onNavigateBack: () -> Unit, onNavigateTo: (String) -> 
             )
         },
         content = {
-            Column(Modifier.verticalScroll(rememberScrollState()).padding(it)) {
+            Column(
+                Modifier.verticalScroll(rememberScrollState())
+                    .padding(it)
+                    .padding(bottom = LocalBottomNavBarInset.current)
+            ) {
                 val downloadState = Task.DownloadState.Running(Job(), "", 0.8f)
                 VideoCardV2(
                     modifier = Modifier.padding(18.dp).clearAndSetSemantics {},

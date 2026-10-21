@@ -61,6 +61,7 @@ import com.junkfood.seal.ui.component.PlaylistItem
 import com.junkfood.seal.ui.component.SealModalBottomSheet
 import com.junkfood.seal.ui.component.SealModalBottomSheetM2Variant
 import com.junkfood.seal.ui.page.download.PlaylistSelectionDialog
+import com.junkfood.seal.ui.page.home.LocalBottomNavBarInset
 import com.junkfood.seal.ui.page.downloadv2.configure.DownloadDialogViewModel.SelectionState
 import com.junkfood.seal.ui.page.settings.format.AudioQuickSettingsDialog
 import com.junkfood.seal.ui.page.settings.format.VideoQuickSettingsDialog
@@ -303,7 +304,10 @@ fun PlaylistSelectionPageImpl(
         },
         bottomBar = {
             Column(
-                modifier = Modifier.fillMaxWidth().padding(bottom = 4.dp).navigationBarsPadding(),
+                modifier =
+                    Modifier.fillMaxWidth()
+                        .padding(bottom = 4.dp + LocalBottomNavBarInset.current)
+                        .navigationBarsPadding(),
                 verticalArrangement = Arrangement.Center,
             ) {
                 HorizontalDivider(modifier = Modifier.fillMaxWidth())

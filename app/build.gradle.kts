@@ -26,18 +26,27 @@ val currentVersionCode = currentVersion.code.toInt()
 android {
     compileSdk = 37
 
-    if (keystorePropertiesFile.exists()) {
-        val keystoreProperties = Properties()
-        keystoreProperties.load(FileInputStream(keystorePropertiesFile))
-        signingConfigs {
-            create("githubPublish") {
-                keyAlias = keystoreProperties["keyAlias"].toString()
-                keyPassword = keystoreProperties["keyPassword"].toString()
-                storeFile = file(keystoreProperties["storeFile"]!!)
-                storePassword = keystoreProperties["storePassword"].toString()
+    val keystoreFile: File? =
+        if (keystorePropertiesFile.exists()) {
+            val keystoreProperties = Properties()
+            keystoreProperties.load(FileInputStream(keystorePropertiesFile))
+            val resolvedKeystoreFile = file(keystoreProperties["storeFile"]!!)
+            if (resolvedKeystoreFile.exists()) {
+                signingConfigs {
+                    create("githubPublish") {
+                        keyAlias = keystoreProperties["keyAlias"].toString()
+                        keyPassword = keystoreProperties["keyPassword"].toString()
+                        storeFile = resolvedKeystoreFile
+                        storePassword = keystoreProperties["storePassword"].toString()
+                    }
+                }
+                resolvedKeystoreFile
+            } else {
+                null
             }
+        } else {
+            null
         }
-    }
 
     buildFeatures { buildConfig = true }
 
@@ -100,12 +109,12 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
             )
-            if (keystorePropertiesFile.exists()) {
+            if (keystoreFile != null) {
                 signingConfig = signingConfigs.getByName("githubPublish")
             }
         }
         debug {
-            if (keystorePropertiesFile.exists()) {
+            if (keystoreFile != null) {
                 signingConfig = signingConfigs.getByName("githubPublish")
             }
             applicationIdSuffix = ".debug"

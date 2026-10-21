@@ -23,6 +23,7 @@ import com.junkfood.seal.R
 import com.junkfood.seal.ui.component.PreferenceItem
 import com.junkfood.seal.ui.component.PreferenceSubtitle
 import com.junkfood.seal.ui.component.PreferenceSwitchWithDivider
+import com.junkfood.seal.ui.page.home.LocalBottomNavBarInset
 import com.junkfood.seal.ui.page.security.SetPinDialog
 import com.junkfood.seal.ui.theme.SealTheme
 import com.junkfood.seal.util.AuthenticationManager
@@ -71,6 +72,7 @@ fun SecuritySettingsPage(
             modifier = modifier
                 .fillMaxSize()
                 .padding(paddingValues)
+                .padding(bottom = LocalBottomNavBarInset.current)
         ) {
             item {
                 PreferenceSubtitle(

@@ -83,6 +83,7 @@ import com.junkfood.seal.download.DownloaderV2
 import com.junkfood.seal.download.Task
 import com.junkfood.seal.ui.common.LocalDarkTheme
 import com.junkfood.seal.ui.component.BackButton
+import com.junkfood.seal.ui.page.home.LocalBottomNavBarInset
 import com.junkfood.seal.ui.page.settings.format.AudioQuickSettingsDialog
 import com.junkfood.seal.ui.page.settings.format.VideoQuickSettingsDialog
 import com.junkfood.seal.util.AUDIO_CONVERSION_FORMAT
@@ -210,7 +211,8 @@ fun BatchUrlImportPage(
                     modifier = Modifier
                         .fillMaxWidth()
                         .navigationBarsPadding()
-                        .padding(horizontal = 16.dp, vertical = 8.dp),
+                        .padding(horizontal = 16.dp, vertical = 8.dp)
+                        .padding(bottom = LocalBottomNavBarInset.current),
                 ) {
                     Button(
                         onClick = {

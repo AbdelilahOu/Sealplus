@@ -49,6 +49,7 @@ import com.junkfood.seal.App
 import com.junkfood.seal.R
 import com.junkfood.seal.ui.common.Route
 import com.junkfood.seal.ui.common.intState
+import com.junkfood.seal.ui.page.home.LocalBottomNavBarInset
 import com.junkfood.seal.ui.component.BackButton
 import com.junkfood.seal.ui.component.PreferenceItem
 import com.junkfood.seal.ui.component.PreferenceSubtitle
@@ -122,7 +123,7 @@ fun SettingsPage(onNavigateBack: () -> Unit, onNavigateTo: (String) -> Unit) {
             contentPadding =
                 PaddingValues(
                     top = it.calculateTopPadding(),
-                    bottom = it.calculateBottomPadding() + 100.dp,
+                    bottom = it.calculateBottomPadding() + LocalBottomNavBarInset.current + 24.dp,
                 ),
         ) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {

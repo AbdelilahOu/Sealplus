@@ -44,6 +44,7 @@ import com.junkfood.seal.ui.component.PreferenceSingleChoiceItem
 import com.junkfood.seal.ui.component.PreferenceSubtitle
 import com.junkfood.seal.ui.component.PreferenceSwitchWithContainer
 import com.junkfood.seal.ui.page.UpdateDialog
+import com.junkfood.seal.ui.page.home.LocalBottomNavBarInset
 import com.junkfood.seal.util.AUTO_UPDATE
 import com.junkfood.seal.util.PRE_RELEASE
 import com.junkfood.seal.util.PreferenceUtil
@@ -86,7 +87,10 @@ fun UpdatePage(onNavigateBack: () -> Unit) {
             )
         },
         content = { paddings ->
-            LazyColumn(modifier = Modifier.padding(paddings)) {
+            LazyColumn(
+                modifier =
+                    Modifier.padding(paddings).padding(bottom = LocalBottomNavBarInset.current)
+            ) {
                 item {
                     PreferenceSwitchWithContainer(
                         title = stringResource(id = R.string.enable_auto_update),

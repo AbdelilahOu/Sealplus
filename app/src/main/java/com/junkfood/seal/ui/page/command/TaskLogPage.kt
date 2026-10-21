@@ -48,6 +48,7 @@ import androidx.compose.ui.unit.sp
 import com.junkfood.seal.Downloader
 import com.junkfood.seal.R
 import com.junkfood.seal.ui.component.ButtonChip
+import com.junkfood.seal.ui.page.home.LocalBottomNavBarInset
 
 private const val TAG = "TaskLogPage"
 
@@ -80,7 +81,10 @@ fun TaskLogPage(onNavigateBack: () -> Unit, taskHashCode: Int) {
         },
         bottomBar = {
             Column(
-                modifier = Modifier.fillMaxWidth().padding(bottom = 4.dp).navigationBarsPadding(),
+                modifier =
+                    Modifier.fillMaxWidth()
+                        .padding(bottom = 4.dp + LocalBottomNavBarInset.current)
+                        .navigationBarsPadding(),
                 verticalArrangement = Arrangement.Center,
             ) {
                 Divider(modifier = Modifier.fillMaxWidth())

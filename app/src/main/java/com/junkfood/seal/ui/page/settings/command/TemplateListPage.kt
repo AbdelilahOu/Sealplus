@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
@@ -76,6 +77,7 @@ import com.junkfood.seal.ui.component.HelpDialog
 import com.junkfood.seal.ui.component.PreferenceItemVariant
 import com.junkfood.seal.ui.component.PreferenceSwitchWithContainer
 import com.junkfood.seal.ui.component.TemplateItem
+import com.junkfood.seal.ui.page.home.LocalBottomNavBarInset
 import com.junkfood.seal.ui.page.settings.about.YtdlpRepository
 import com.junkfood.seal.util.CUSTOM_COMMAND
 import com.junkfood.seal.util.DatabaseUtil
@@ -228,7 +230,7 @@ fun TemplateListPage(onNavigateBack: () -> Unit, onNavigateToEditPage: (Int) -> 
                 enter = expandVertically() + fadeIn(),
                 exit = shrinkVertically() + fadeOut(),
             ) {
-                BottomAppBar {
+                BottomAppBar(modifier = Modifier.padding(bottom = LocalBottomNavBarInset.current)) {
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier.fillMaxWidth(),
@@ -307,7 +309,14 @@ fun TemplateListPage(onNavigateBack: () -> Unit, onNavigateToEditPage: (Int) -> 
             }
         },
     ) {
-        LazyColumn(modifier = Modifier, contentPadding = it) {
+        LazyColumn(
+            modifier = Modifier,
+            contentPadding =
+                PaddingValues(
+                    top = it.calculateTopPadding(),
+                    bottom = it.calculateBottomPadding() + LocalBottomNavBarInset.current,
+                ),
+        ) {
             item {
                 PreferenceSwitchWithContainer(
                     title = stringResource(R.string.use_custom_command),

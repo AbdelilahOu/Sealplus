@@ -37,6 +37,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
+import com.junkfood.seal.ui.page.home.LocalBottomNavBarInset
 import kotlinx.coroutines.launch
 
 @Composable
@@ -145,6 +146,14 @@ fun SealModalBottomSheetM2(
                     modifier =
                         Modifier.background(MaterialTheme.colorScheme.surfaceContainerHigh)
                             .fillMaxWidth()
+                )
+                // Reserve space for the floating BottomNavBar, which overlays this
+                // in-tree sheet rather than drawing above it like a real Dialog would.
+                Spacer(
+                    modifier =
+                        Modifier.background(MaterialTheme.colorScheme.surfaceContainerHigh)
+                            .fillMaxWidth()
+                            .height(LocalBottomNavBarInset.current)
                 )
             }
         },

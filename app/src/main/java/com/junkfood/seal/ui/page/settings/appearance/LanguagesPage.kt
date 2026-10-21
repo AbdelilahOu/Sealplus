@@ -48,6 +48,7 @@ import com.junkfood.seal.ui.component.BackButton
 import com.junkfood.seal.ui.component.PreferenceSingleChoiceItem
 import com.junkfood.seal.ui.component.PreferenceSubtitle
 import com.junkfood.seal.ui.component.PreferencesHintCard
+import com.junkfood.seal.ui.page.home.LocalBottomNavBarInset
 import com.junkfood.seal.ui.page.settings.about.weblate
 import com.junkfood.seal.ui.theme.SealTheme
 import com.junkfood.seal.util.LocaleLanguageCodeMap
@@ -164,7 +165,14 @@ private fun LanguagePageImpl(
             )
         },
         content = {
-            LazyColumn(modifier = Modifier, contentPadding = it) {
+            LazyColumn(
+                modifier = Modifier,
+                contentPadding =
+                    PaddingValues(
+                        top = it.calculateTopPadding(),
+                        bottom = it.calculateBottomPadding() + LocalBottomNavBarInset.current,
+                    ),
+            ) {
                 item {
                     PreferencesHintCard(
                         title = stringResource(R.string.translate),

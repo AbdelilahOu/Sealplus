@@ -14,6 +14,7 @@ import androidx.core.content.ContextCompat
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -88,6 +89,7 @@ import com.junkfood.seal.ui.component.PreferenceSwitch
 import com.junkfood.seal.ui.component.PreferenceSwitchWithDivider
 import com.junkfood.seal.ui.component.PreferencesHintCard
 import com.junkfood.seal.ui.component.SealDialog
+import com.junkfood.seal.ui.page.home.LocalBottomNavBarInset
 import com.junkfood.seal.util.COMMAND_DIRECTORY
 import com.junkfood.seal.util.CUSTOM_COMMAND
 import com.junkfood.seal.util.CUSTOM_OUTPUT_TEMPLATE
@@ -257,7 +259,14 @@ fun DownloadDirectoryPreferences(onNavigateBack: () -> Unit) {
             )
         },
     ) {
-        LazyColumn(modifier = Modifier, contentPadding = it) {
+        LazyColumn(
+            modifier = Modifier,
+            contentPadding =
+                PaddingValues(
+                    top = it.calculateTopPadding(),
+                    bottom = it.calculateBottomPadding() + LocalBottomNavBarInset.current,
+                ),
+        ) {
             if (isCustomCommandEnabled)
                 item {
                     PreferenceInfo(text = stringResource(id = R.string.custom_command_enabled_hint))

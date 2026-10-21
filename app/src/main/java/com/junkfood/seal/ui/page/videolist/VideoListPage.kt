@@ -98,6 +98,7 @@ import com.junkfood.seal.ui.component.MediaListItem
 import com.junkfood.seal.ui.component.SealDialog
 import com.junkfood.seal.ui.component.SealSearchBar
 import com.junkfood.seal.ui.component.VideoFilterChip
+import com.junkfood.seal.ui.page.home.LocalBottomNavBarInset
 import com.junkfood.seal.ui.svg.DynamicColorImageVectors
 import com.junkfood.seal.ui.svg.drawablevectors.videoSteaming
 import com.junkfood.seal.util.AUDIO_REGEX
@@ -375,7 +376,7 @@ fun VideoListPage(viewModel: VideoListViewModel = koinViewModel(), onNavigateBac
                 enter = expandVertically(),
                 exit = shrinkVertically(),
             ) {
-                BottomAppBar(modifier = Modifier) {
+                BottomAppBar(modifier = Modifier.padding(bottom = LocalBottomNavBarInset.current)) {
                     val selectAllText = stringResource(R.string.select_all)
                     TriStateCheckbox(
                         modifier = Modifier.semantics { this.contentDescription = selectAllText },
@@ -458,7 +459,7 @@ fun VideoListPage(viewModel: VideoListViewModel = koinViewModel(), onNavigateBac
             contentPadding =
                 PaddingValues(
                     top = innerPadding.calculateTopPadding(),
-                    bottom = innerPadding.calculateBottomPadding() + 100.dp,
+                    bottom = innerPadding.calculateBottomPadding() + LocalBottomNavBarInset.current + 24.dp,
                 ),
         ) {
             if (fullVideoList.isNotEmpty()) {

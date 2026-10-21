@@ -26,12 +26,17 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
@@ -67,6 +72,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -75,6 +81,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.junkfood.seal.R
+import com.junkfood.seal.ui.common.AsyncImageImpl
 import com.junkfood.seal.ui.theme.SealTheme
 import com.junkfood.seal.util.Format
 import com.junkfood.seal.util.VideoInfo
@@ -135,25 +142,29 @@ fun FormatVideoPreview(
     Surface(
         modifier = Modifier.fillMaxWidth().wrapContentHeight(Alignment.Top, unbounded = false),
         color = MaterialTheme.colorScheme.surfaceContainerHigh,
-        shape = MaterialTheme.shapes.large,
+        shape = MaterialTheme.shapes.medium,
     ) {
         Box(modifier = Modifier.fillMaxWidth()) {
-            Row(modifier = modifier.fillMaxWidth().padding(10.dp), verticalAlignment = Alignment.CenterVertically) {
-                Box(modifier = Modifier) {
-                    MediaImage(
-                        modifier = Modifier.clip(MaterialTheme.shapes.medium),
-                        imageModel = thumbnailUrl,
-                        isAudio = false,
+            // Row's height is driven by the text column's intrinsic height (plus its own
+            // vertical padding below) so the thumbnail can fillMaxHeight() and match it
+            // exactly, flush against the card's left/top/bottom edges with no clip of its
+            // own — the outer Surface's shape clips it, rounding only the true card corner.
+            Row(modifier = modifier.fillMaxWidth().height(IntrinsicSize.Min)) {
+                Box(modifier = Modifier.fillMaxHeight()) {
+                    AsyncImageImpl(
+                        modifier = Modifier.fillMaxHeight().aspectRatio(16f / 9f),
+                        model = thumbnailUrl,
                         contentDescription = stringResource(id = R.string.thumbnail),
+                        contentScale = ContentScale.Crop,
                     )
                     Surface(
-                        modifier = Modifier.padding(4.dp).align(Alignment.BottomEnd),
+                        modifier = Modifier.padding(2.dp).align(Alignment.BottomEnd),
                         color = Color.Black.copy(alpha = 0.68f),
                         shape = MaterialTheme.shapes.extraSmall,
                     ) {
                         val durationText = duration.toDurationText()
                         Text(
-                            modifier = Modifier.padding(horizontal = 4.dp),
+                            modifier = Modifier.padding(horizontal = 3.dp, vertical = 1.dp),
                             text = durationText,
                             style = MaterialTheme.typography.labelSmall,
                             color = Color.White,
@@ -162,22 +173,24 @@ fun FormatVideoPreview(
                 }
 
                 Column(
-                    modifier = Modifier.fillMaxWidth().padding(end = 32.dp),
-                    verticalArrangement = Arrangement.Top,
+                    modifier =
+                        Modifier.fillMaxWidth()
+                            .padding(start = 8.dp, end = 28.dp, top = 6.dp, bottom = 6.dp),
+                    verticalArrangement = Arrangement.Center,
                 ) {
                     Text(
-                        modifier = Modifier.fillMaxWidth().padding(horizontal = 12.dp),
+                        modifier = Modifier.fillMaxWidth(),
                         text = title,
-                        style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold),
+                        style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.SemiBold),
                         color = MaterialTheme.colorScheme.onSurface,
-                        maxLines = 2,
+                        maxLines = 1,
                         overflow = TextOverflow.Ellipsis,
                     )
                     if (author != "playlist" && author != "null")
                         Text(
-                            modifier = Modifier.padding(horizontal = 12.dp).padding(top = 4.dp),
+                            modifier = Modifier.padding(top = 2.dp),
                             text = author,
-                            style = MaterialTheme.typography.bodyMedium,
+                            style = MaterialTheme.typography.labelSmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis,
@@ -185,10 +198,10 @@ fun FormatVideoPreview(
                 }
             }
             var expanded by remember { mutableStateOf(false) }
-            Box(modifier = Modifier.align(Alignment.TopEnd).padding(6.dp)) {
+            Box(modifier = Modifier.align(Alignment.TopEnd).padding(4.dp)) {
                 Surface(
                     onClick = { expanded = true },
-                    modifier = Modifier.size(32.dp),
+                    modifier = Modifier.size(28.dp),
                     shape = CircleShape,
                     color = MaterialTheme.colorScheme.surfaceContainerHighest,
                 ) {
@@ -196,7 +209,7 @@ fun FormatVideoPreview(
                         Icon(
                             imageVector = Icons.Outlined.MoreVert,
                             contentDescription = stringResource(id = R.string.show_more_actions),
-                            modifier = Modifier.size(18.dp),
+                            modifier = Modifier.size(16.dp),
                             tint = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
                     }
@@ -527,15 +540,16 @@ fun FormatItem(
     }
 
     if (listView) {
-        // New premium card layout: centered, full-width, 3-section vertical design
-        Box(
+        // Table-style row: everything on one line — icons | title | ext | size | check
+        val rowShape = RoundedCornerShape(10.dp)
+        Row(
             modifier = modifier
                 .fillMaxWidth()
                 .graphicsLayer {
                     scaleX = scale
                     scaleY = scale
                 }
-                .clip(cardShape)
+                .clip(rowShape)
                 .combinedClickable(
                     interactionSource = interactionSource,
                     onClick = { onClick() },
@@ -543,78 +557,67 @@ fun FormatItem(
                     onLongClickLabel = stringResource(R.string.copy_link),
                 )
                 .border(
-                    width = if (selected) 2.dp else 1.dp,
+                    width = if (selected) 1.5.dp else 1.dp,
                     color = animatedOutlineColor,
-                    shape = cardShape,
+                    shape = rowShape,
                 )
                 .background(animatedContainerColor)
+                .padding(horizontal = 12.dp, vertical = 9.dp),
+            verticalAlignment = Alignment.CenterVertically,
         ) {
-            Column(
-                modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 14.dp),
-                verticalArrangement = Arrangement.spacedBy(6.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-            ) {
-                // Top Section: Resolution / title — large, bold, perfectly centered
+            mediaIcons()
+
+            Text(
+                text = title,
+                style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.SemiBold),
+                color = animatedTitleColor,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                modifier = Modifier.weight(1f).padding(start = 10.dp, end = 8.dp),
+            )
+
+            val extText = listViewFormatExt.ifBlank { secondLineText }
+            if (extText.isNotBlank()) {
                 Text(
-                    text = title,
-                    style = MaterialTheme.typography.titleLarge,
-                    fontWeight = FontWeight.Bold,
-                    color = animatedTitleColor,
-                    textAlign = TextAlign.Center,
+                    text = extText,
+                    style = MaterialTheme.typography.labelSmall,
+                    color = animatedSecondLineColor,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
-                    modifier = Modifier.fillMaxWidth(),
                 )
+            }
 
-                // Middle Section: Format icon(s) + format text — horizontally centered
-                val middleText = listViewFormatExt.ifBlank { secondLineText }
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically,
+            val sizeText = listViewFileSizeText.ifBlank { firstLineText }
+            if (sizeText.isNotBlank()) {
+                Text(
+                    text = sizeText,
+                    style = MaterialTheme.typography.labelMedium,
+                    color = animatedSecondLineColor,
+                    textAlign = TextAlign.End,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    modifier = Modifier.padding(start = 8.dp).widthIn(min = 62.dp),
+                )
+            }
+
+            AnimatedVisibility(
+                visible = selected,
+                enter = scaleIn(initialScale = 0.5f) + fadeIn(),
+                exit = scaleOut(targetScale = 0.5f) + fadeOut(),
+            ) {
+                Box(
+                    modifier = Modifier.padding(start = 8.dp).size(18.dp)
+                        .background(outlineColor, CircleShape),
+                    contentAlignment = Alignment.Center,
                 ) {
-                    mediaIcons()
-                    if (middleText.isNotBlank()) {
-                        Spacer(modifier = Modifier.width(6.dp))
-                        Text(
-                            text = middleText,
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = animatedSecondLineColor,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis,
-                        )
-                    }
-                }
-
-                // Bottom Section: file size (left) | bitrate + codec (right)
-                val bottomLeft = listViewFileSizeText.ifBlank { firstLineText }
-                val bottomRight = listViewBitrateCodecText
-                if (bottomLeft.isNotBlank() || bottomRight.isNotBlank()) {
-                    Row(
-                        modifier = Modifier.fillMaxWidth().padding(top = 2.dp),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically,
-                    ) {
-                        Text(
-                            text = bottomLeft,
-                            style = MaterialTheme.typography.bodySmall,
-                            color = animatedSecondLineColor,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis,
-                        )
-                        if (bottomRight.isNotBlank()) {
-                            Text(
-                                text = bottomRight,
-                                style = MaterialTheme.typography.bodySmall,
-                                color = animatedSecondLineColor,
-                                maxLines = 1,
-                                overflow = TextOverflow.Ellipsis,
-                            )
-                        }
-                    }
+                    Icon(
+                        imageVector = Icons.Outlined.Check,
+                        contentDescription = null,
+                        modifier = Modifier.size(12.dp),
+                        tint = selectedTextColor,
+                    )
                 }
             }
-            checkBadge()
         }
     } else {
         // Original grid card layout

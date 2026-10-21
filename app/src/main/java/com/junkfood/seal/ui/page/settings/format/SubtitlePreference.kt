@@ -1,6 +1,7 @@
 package com.junkfood.seal.ui.page.settings.format
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
@@ -38,6 +39,7 @@ import com.junkfood.seal.ui.component.PreferenceInfo
 import com.junkfood.seal.ui.component.PreferenceItem
 import com.junkfood.seal.ui.component.PreferenceSwitch
 import com.junkfood.seal.ui.component.PreferenceSwitchWithContainer
+import com.junkfood.seal.ui.page.home.LocalBottomNavBarInset
 import com.junkfood.seal.util.AUTO_SUBTITLE
 import com.junkfood.seal.util.AUTO_TRANSLATED_SUBTITLES
 import com.junkfood.seal.util.EMBED_SUBTITLE
@@ -107,7 +109,14 @@ fun SubtitlePreference(onNavigateBack: () -> Unit) {
             )
         },
         content = {
-            LazyColumn(modifier = Modifier, contentPadding = it) {
+            LazyColumn(
+                modifier = Modifier,
+                contentPadding =
+                    PaddingValues(
+                        top = it.calculateTopPadding(),
+                        bottom = it.calculateBottomPadding() + LocalBottomNavBarInset.current,
+                    ),
+            ) {
                 item {
                     PreferenceSwitchWithContainer(
                         title = stringResource(id = R.string.download_subtitles),

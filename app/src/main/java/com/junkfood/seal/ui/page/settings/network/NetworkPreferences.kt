@@ -1,5 +1,6 @@
 package com.junkfood.seal.ui.page.settings.network
 
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
@@ -33,6 +34,7 @@ import com.junkfood.seal.ui.component.PreferenceItem
 import com.junkfood.seal.ui.component.PreferenceSubtitle
 import com.junkfood.seal.ui.component.PreferenceSwitch
 import com.junkfood.seal.ui.component.PreferenceSwitchWithDivider
+import com.junkfood.seal.ui.page.home.LocalBottomNavBarInset
 import com.junkfood.seal.util.ARIA2C
 import com.junkfood.seal.util.CELLULAR_DOWNLOAD
 import com.junkfood.seal.util.COOKIES
@@ -72,7 +74,13 @@ fun NetworkPreferences(navigateToCookieProfilePage: () -> Unit = {}, onNavigateB
         content = {
             val isCustomCommandEnabled by CUSTOM_COMMAND.booleanState
 
-            LazyColumn(contentPadding = it) {
+            LazyColumn(
+                contentPadding =
+                    PaddingValues(
+                        top = it.calculateTopPadding(),
+                        bottom = it.calculateBottomPadding() + LocalBottomNavBarInset.current,
+                    )
+            ) {
                 if (isCustomCommandEnabled)
                     item {
                         PreferenceInfo(

@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import com.junkfood.seal.R
 import com.junkfood.seal.ui.component.BackButton
 import com.junkfood.seal.ui.component.CreditItem
+import com.junkfood.seal.ui.page.home.LocalBottomNavBarInset
 import com.junkfood.seal.ui.svg.DynamicColorImageVectors
 import com.junkfood.seal.ui.svg.drawablevectors.coder
 
@@ -109,7 +110,9 @@ fun CreditsPage(onNavigateBack: () -> Unit) {
             )
         },
         content = {
-            LazyColumn(modifier = Modifier.padding(it)) {
+            LazyColumn(
+                modifier = Modifier.padding(it).padding(bottom = LocalBottomNavBarInset.current)
+            ) {
                 item {
                     Surface(
                         modifier =

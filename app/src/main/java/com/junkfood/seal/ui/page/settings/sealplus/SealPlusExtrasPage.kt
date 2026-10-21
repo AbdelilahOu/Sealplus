@@ -43,6 +43,7 @@ import com.junkfood.seal.ui.component.PreferenceSingleChoiceItem
 import com.junkfood.seal.ui.component.PreferenceSwitch
 import com.junkfood.seal.ui.component.SettingsGroupCard
 import com.junkfood.seal.ui.component.SettingsGroupDivider
+import com.junkfood.seal.ui.page.home.LocalBottomNavBarInset
 import com.junkfood.seal.ui.page.security.LockScreen
 import com.junkfood.seal.util.AuthenticationManager
 import com.junkfood.seal.util.ARIA2C_CONNECTIONS
@@ -136,7 +137,8 @@ fun SealPlusExtrasPage(
         }
     ) { paddingValues ->
         LazyColumn(
-            modifier = Modifier.padding(paddingValues)
+            modifier =
+                Modifier.padding(paddingValues).padding(bottom = LocalBottomNavBarInset.current)
         ) {
             item {
                 PreferenceSubtitle(text = stringResource(R.string.download_control))

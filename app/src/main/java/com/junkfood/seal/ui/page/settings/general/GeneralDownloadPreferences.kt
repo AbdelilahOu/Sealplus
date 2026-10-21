@@ -7,6 +7,7 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -83,6 +84,7 @@ import com.junkfood.seal.ui.component.PreferenceSwitch
 import com.junkfood.seal.ui.component.PreferenceSwitchWithDivider
 import com.junkfood.seal.ui.component.SealDialog
 import com.junkfood.seal.ui.page.download.NotificationPermissionDialog
+import com.junkfood.seal.ui.page.home.LocalBottomNavBarInset
 import com.junkfood.seal.util.BATTERY_POPUP_HIDDEN
 import com.junkfood.seal.util.CONFIGURE
 import com.junkfood.seal.util.CUSTOM_COMMAND
@@ -176,7 +178,14 @@ fun GeneralDownloadPreferences(onNavigateBack: () -> Unit, navigateToTemplate: (
         },
         content = {
             val isCustomCommandEnabled by remember { mutableStateOf(CUSTOM_COMMAND.getBoolean()) }
-            LazyColumn(modifier = Modifier, contentPadding = it) {
+            LazyColumn(
+                modifier = Modifier,
+                contentPadding =
+                    PaddingValues(
+                        top = it.calculateTopPadding(),
+                        bottom = it.calculateBottomPadding() + LocalBottomNavBarInset.current,
+                    ),
+            ) {
                 //                item {
                 //                    SettingTitle(text = stringResource(id =
                 // R.string.general_settings))
