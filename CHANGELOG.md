@@ -5,6 +5,26 @@ All notable changes (starting from v1.7.3) to stable releases will be documented
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.2.0] - 2026-10-21
+
+### 🎛️ Format Selection Rework
+
+* **Format Tabs** — Video, Audio and Video-only are switchable tabs instead of three stacked lists, so only one set of formats is on screen at a time
+* **Table-Style Rows** — Each format is a single compact line showing media icons, resolution, container and file size, with sizes aligned down the column
+* **Floating Download Button** — The nav bar hides while a format is being picked and a floating Download button takes its place
+* **Compact Preview Card** — The video thumbnail is full-height and flush to the leading edge, with tighter spacing throughout the sheet
+* **Removed Clutter** — The subtitle language picker, grid/list layout toggle, suggested-format section and "N formats filtered out" banner are gone
+
+### 📐 Floating Nav Bar
+
+* **No More Hidden Content** — The bar's height is measured live and reserved by scrollable screens, so buttons and list items no longer render underneath it
+* **Settings Sub-Pages Fixed** — The inset is applied in `BasePreferencePage`, so every settings sub-page reserves the space as well
+* **Tighter Layout** — Equal padding on all sides, Home and Settings pinned to the edges, and 10% narrower overall
+
+### 🔧 Build
+
+* **Debug Builds Without the Release Key** — The `githubPublish` signing config is only wired up when the keystore file actually exists, so local debug builds no longer fail on a missing `.jks`
+
 ## [3.1.0] - 2026-10-13
 
 ### 🔁 Retry All & Download Queue Recovery

@@ -83,35 +83,28 @@ jobs:
         tag_name: v${{ steps.version.outputs.VERSION }}
         name: Seal Plus v${{ steps.version.outputs.VERSION }}
         body: |
-          ## ✨ Seal Plus v3.1.0 - Retry All, Download Reliability, Battery Opt-Out
-          
+          ## ✨ Seal Plus v3.2.0 - Format Selection Rework, Floating Nav Bar Fixes
+
           ---
-          
-          ### 🔁 Retry All & Queue Recovery
-          
-          * **Retry All on Home** — Retry All button in the "Recent downloads" header for Canceled or Failed tasks
-          * **Queued Tasks Survive Restarts** — Queued tasks restore as queued after force-stop instead of becoming Failed
-          
-          ### 🎬 Download Fixes
-          
-          * **Custom Video Formats Fixed** — Custom formats with unreported codecs download the video correctly (thanks @ptgullas, PR #29)
-          * **MP4 Output for Merged Videos** — Video downloads use MP4 unless MKV is selected
-          * **Configure Switch Respected** — With "Configure before download" off, Quick Download, share, and the URL button download immediately (#30)
-          * **Output Template** — Custom templates no longer need `.%(ext)s` (#14)
-          * **Douyin Login** — Opens as a desktop session (#27)
-          
-          ### 🔋 Battery & Stability
-          
-          * **Hide Battery Reminder** — Opt-out in General settings (#26)
-          * **HarmonyOS Crash Fixed** — Battery settings no longer crash on HarmonyOS 4.x (#20)
-          * **Smoother Progress** — Throttled progress updates fix unresponsive menus on OEM ROMs (#10)
-          * **Crash & Memory Hardening** — Safer download state handling and memory leak fixes
-          
-          ### 💖 Donations & Sponsors
-          
-          * **Trust Wallet Donations** — Crypto Donations page with Trust Wallet deep link and QR code
-          * **Sponsor List** — New community supporters added
-          
+
+          ### 🎛️ Format Selection Rework
+
+          * **Format Tabs** — Video, Audio and Video-only are switchable tabs instead of three stacked lists, so only one set of formats is on screen at a time
+          * **Table-Style Rows** — Each format is one compact line: media icons, resolution, container and file size, with sizes aligned down the column
+          * **Floating Download Button** — The nav bar steps aside while you pick a format and a floating Download button takes its place
+          * **Compact Preview Card** — The video thumbnail is full-height and flush to the edge, with tighter spacing throughout the sheet
+          * **Less Clutter** — Removed the subtitle language picker, the grid/list layout toggle, the suggested-format section and the "N formats filtered out" banner
+
+          ### 📐 Floating Nav Bar
+
+          * **No More Hidden Content** — The bar's height is measured live and reserved by scrollable screens, so buttons and list items no longer sit underneath it
+          * **Settings Sub-Pages Fixed** — The inset is applied at the framework level, so every settings sub-page reserves the space too
+          * **Tighter Layout** — Equal padding on all sides, Home and Settings pinned to the edges, and 10% narrower overall
+
+          ### 🔧 Build
+
+          * **Debug Builds Without the Release Key** — Signing is only wired up when the keystore file actually exists, so local debug builds no longer fail on a missing `.jks`
+
           ### 📦 Installation
           
           Download the appropriate APK for your device:
@@ -158,30 +151,27 @@ jobs:
         MESSAGE+="📱 <b>App Name:</b> Seal Plus\n\n"
         MESSAGE+="🏷️ <b>Version:</b> v${{ steps.version.outputs.VERSION }}\n\n"
         MESSAGE+="━━━━━━━━━━━━━━━━━━━━━━━\n\n"
-        MESSAGE+="📋 <b>Changelog (v3.1):</b>\n\n"
-        MESSAGE+="<b>🔁 Retry All &amp; Queue Recovery</b>\n"
-        MESSAGE+="  ➤ Retry All button on Home for canceled/failed tasks\n"
-        MESSAGE+="  ➤ Queued tasks survive force-stop instead of failing\n\n"
-        MESSAGE+="<b>🎬 Download Fixes</b>\n"
-        MESSAGE+="  ➤ Custom video formats download video correctly (thanks @ptgullas)\n"
-        MESSAGE+="  ➤ MP4 output for merged videos\n"
-        MESSAGE+="  ➤ Configure switch respected in Quick Download and share\n"
-        MESSAGE+="  ➤ Custom output templates no longer need .%(ext)s\n"
-        MESSAGE+="  ➤ Douyin login opens as desktop session\n\n"
-        MESSAGE+="<b>🔋 Battery &amp; Stability</b>\n"
-        MESSAGE+="  ➤ Hide battery reminder option in General settings\n"
-        MESSAGE+="  ➤ HarmonyOS 4.x battery settings crash fixed\n"
-        MESSAGE+="  ➤ Smoother progress on OEM ROMs, crash &amp; memory hardening\n\n"
-        MESSAGE+="<b>💖 Donations</b>\n"
-        MESSAGE+="  ➤ Trust Wallet deep link &amp; QR code, new sponsors\n\n"
+        MESSAGE+="📋 <b>Changelog (v3.2):</b>\n\n"
+        MESSAGE+="<b>🎛️ Format Selection Rework</b>\n"
+        MESSAGE+="  ➤ Video, Audio and Video-only are now switchable tabs\n"
+        MESSAGE+="  ➤ Each format is one compact table-style row\n"
+        MESSAGE+="  ➤ Floating Download button replaces the nav bar while picking\n"
+        MESSAGE+="  ➤ Full-height thumbnail and tighter spacing throughout\n"
+        MESSAGE+="  ➤ Dropped the subtitle picker, layout toggle and filter banner\n\n"
+        MESSAGE+="<b>📐 Floating Nav Bar</b>\n"
+        MESSAGE+="  ➤ Content no longer hides underneath the bar on any screen\n"
+        MESSAGE+="  ➤ Settings sub-pages reserve the space too\n"
+        MESSAGE+="  ➤ Equal padding, edge-pinned Home/Settings, 10% narrower\n\n"
+        MESSAGE+="<b>🔧 Build</b>\n"
+        MESSAGE+="  ➤ Debug builds work without the release keystore\n\n"
         MESSAGE+="━━━━━━━━━━━━━━━━━━━━━━━\n\n"
-        MESSAGE+="✨ <b>Key Features (v3.1):</b>\n"
-        MESSAGE+="🔁 Retry All — Restart canceled/failed downloads in one tap\n"
-        MESSAGE+="🎬 Custom Formats — Video downloads fixed (PR #29)\n"
-        MESSAGE+="🔋 Hide Battery Reminder — Opt-out in settings\n"
+        MESSAGE+="✨ <b>Key Features (v3.2):</b>\n"
+        MESSAGE+="🎛️ Format Tabs — One format list at a time, no endless scrolling\n"
+        MESSAGE+="📋 Table Rows — Compact single-line formats with aligned sizes\n"
+        MESSAGE+="📐 Nav Bar Fixes — Nothing hides behind the floating bar\n"
         MESSAGE+="🌐 1000+ sites via yt-dlp\n\n"
         MESSAGE+="━━━━━━━━━━━━━━━━━━━━━━━\n\n"
-        MESSAGE+="💡 <b>Note:</b> v3.1 adds Retry All on the home screen, fixes custom video format downloads, keeps queued tasks after restarts, adds a battery reminder opt-out, and fixes the HarmonyOS battery crash.\n\n"
+        MESSAGE+="💡 <b>Note:</b> v3.2 reworks format selection into switchable tabs with compact table-style rows, swaps the nav bar for a floating Download button while picking a format, and fixes content hiding behind the floating nav bar across the app.\n\n"
         MESSAGE+="🕐 <i>Released: $(date '+%B %d, %Y at %H:%M UTC')</i>"
         
         # URL encode the message to avoid HTML parsing issues
